@@ -21,5 +21,5 @@
 【データベースの設計】
 ・記録形式
 　pcc-usersテーブル
-　学年,学科,表示名,ユーザ名,パスワードのハッシュ,email,discord,役職
-　grade,mesc,displayname,uname,passwd,email,discord,post
+　学年,学科,表示名,ユーザ名,パスワードのハッシュ,email,discord,役職,ユーザ設定画面のアクセストークン
+　grade,mesc,displayname,uname,passwd,email,discord,post,setting_token
