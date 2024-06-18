@@ -16,4 +16,10 @@
 
 【PCC-CASの本体の仕様】
 ・データベースサーバとして、MySQLを使用する。
-・言語は
+・言語はPythonでいいや
+
+【データベースの設計】
+・記録形式
+　pcc-usersテーブル
+　学年,学科,表示名,ユーザ名,パスワードのハッシュ,email,discord,役職
+　grade,mesc,displayname,uname,passwd,email,discord,post

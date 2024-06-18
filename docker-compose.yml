@@ -1,0 +1,26 @@
+services:
+  db:
+    image: mysql
+    container_name: pcc-cas-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: N1tacPcc2024@
+      MYSQL_PORT: 3306 # MySQLのデフォルトポート
+    ports:
+      - 3306:3306 # 3306のポートがきたら、3306のポートを使う
+    volumes:
+      - pcc-cas-db:/var/lib/mysql
+  
+  flask:
+    container_name: pcc-cas
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 4545:8080
+    restart: always
+    tty: true
+    depends_on:
+      - db
+    volumes:
+    - pcc-cas:/pcc-cas
