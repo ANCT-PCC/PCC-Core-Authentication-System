@@ -10,7 +10,7 @@ import userSubmit
 
 TOKEN_SIZE = 64 #トークンのサイズ
 COOKIE_AGE = 0.5 #Cookieの有効期限(単位:h)
-VERSION = 'ver.2.0'
+VERSION = 'ver 1.0'
 
 #初期化処理
 def init():
