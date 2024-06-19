@@ -204,13 +204,13 @@
 
 </svg>
 
-<header class="navbar sticky-top flex-md-nowrap p-0 shadow" style="background-color: #75fbfd;" data-bs-theme="dark">
+<header class="navbar sticky-top flex-md-nowrap p-0 shadow" style="background-color: #EC7B02;" data-bs-theme="dark">
   <a href="/" class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-5 text-white pc">
-    <img class="pc" style="max-width: 100%;height: auto;" src="static/assets/PCC-SYSTEM-1.png"></img>
+    <img class="pc" style="max-width: 100%;height: auto;" src="static/assets/PCC-CAS-logo.png"></img>
     {{ver}}
   </a>
   <a href="/" class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-5 text-white sp">
-    <img style="max-width: 50%;height: auto;" src="static/assets/PCC-SYSTEM-1.png"> {{ver}}</img>
+    <img style="max-width: 50%;height: auto;" src="static/assets/PCC-CAS-logo.png"> {{ver}}</img>
   </a>
 
   <ul class="navbar-nav flex-row d-md-none"></ul>
@@ -233,24 +233,6 @@
               <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="/">
                 <svg class="bi"><use xlink:href="#house-fill"/></svg>
                 トップ
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="/my_rental_list">
-                <svg class="bi"><use xlink:href="#file-earmark"/></svg>
-                借りている備品
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="/pcc-items">
-                <svg class="bi"><use xlink:href="#cart"/></svg>
-                備品を借りる
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link d-flex align-items-center gap-2" href="/members">
-                <svg class="bi"><use xlink:href="#people"/></svg>
-                部員
               </a>
             </li>
             <li class="nav-item">
@@ -295,9 +277,10 @@
           <thead>
             <tr>
               <th scope="col">部員名</th>
-              <th scope="col">ユーザ名</th>
+              <th scope="col">役職</th>
               <th scope="col">学年・クラス</th>
-              <th scope="col">備考</th>
+              <th scope="col">ユーザ名</th>
+              <th scope="col">Discordユーザ名</th>
             </tr>
           </thead>
           <tbody id="item-table">

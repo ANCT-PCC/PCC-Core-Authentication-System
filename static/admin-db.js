@@ -1,12 +1,7 @@
 const SERVER_ADDR = 'http://localhost:8080/'
-const $DB_DOUNLOAD = document.getElementById('dbdl_button');
 const $SQL_EXECUTE = document.getElementById('sqlexecute_button') 
 const $SQL_RESULT = document.getElementById('sqlresult')
 const $SQL_CMD = document.getElementById('sqlcmd')
-
-$DB_DOUNLOAD.addEventListener('click',(e)=>{
-    window.location = SERVER_ADDR+'admintools/pcc-rent.db'
-})
 
 $SQL_EXECUTE.addEventListener('click',(e)=>{
     command = $SQL_CMD.value

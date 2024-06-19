@@ -22,17 +22,19 @@ window.onload = function(){
           //tr エレメントを新規作成(ただ生成するだけ)
           var tr = document.createElement('tr');
           //列(td)用のループ
-          for (j = 0; j < 4; j++){
+          for (j = 0; j < 5; j++){
               //tdエレメントをを生成
               var td = document.createElement('td');
               //tdの中に入れたいモノをセット
               if(j == 0){
-                td.innerHTML = res[i]['display']
-              }else if(j== 1){
-                td.innerHTML = res[i]['uname']
+                td.innerHTML = res[i]['displayname']
+              }else if(j==1){
+                td.innerHTML = res[i]['post']
               }else if(j==2){
                 td.innerHTML = res[i]['grade']+res[i]['class']
               }else if(j==3){
+                td.innerHTML = res[i]['uname']
+              }else if(j==4){
                 td.innerHTML = "Discord: "+res[i]['discord']
               }
               //生成したtdをtrにセット

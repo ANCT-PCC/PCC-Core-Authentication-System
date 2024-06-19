@@ -1,0 +1,9 @@
+起動前に以下の点を確認する
+
+・「setting_files」フォルダが存在するか
+・上記フォルダ内に「admin_info.json」が存在するか
+　→ファイルの中身は{"管理者アカウント名":"パスワード"}になっているか
+・「dbc.py」の中の変数「DB_PASSWD」と
+　「docker-compose.yml」の「MYSQL_ROOT_PASSWORD」の
+　内容が同じか。
+・上記パスワードは安全なものか

@@ -203,7 +203,7 @@
 
 </svg>
 
-<header class="navbar sticky-top flex-md-nowrap p-0 shadow" style="background-color: #75fbfd;" data-bs-theme="dark">
+<header class="navbar sticky-top flex-md-nowrap p-0 shadow" style="background-color: #EC7B02;" data-bs-theme="dark">
   <a href="/admintools/top" class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-5 text-white">PCC-CAS 管理 {{ver}}</a>
   <ul class="navbar-nav flex-row d-md-none">
     <li class="nav-item text-nowrap">
@@ -231,16 +231,17 @@
       </ol>
       <h5 class="mt-1">ユーザ一括登録</h5>      
       <div class="mb-1">
-        <label for="exampleFormControlTextarea1" class="form-label">「学年,学科(M,E,S,C),表示名,ユーザ名,役職(数字で表記)」の形式で入力(改行で複数登録)</label>
+        <label for="exampleFormControlTextarea1" class="form-label">「共通認証ID,学年,学科(M,E,S,C),部員名,役職(数字)」の形式で入力(改行で複数登録)</label>
+        <br>
         <label for="exampleFormControlTextarea1" class="form-label">役職は、0:なし 1:部長 2:副部長 3:会計 4:その他の役職 としてください</label>
-        <textarea style="width: 70%;" class="form-control" id="userlist" rows="10"></textarea>
+        <textarea style="width: 70%;" class="form-control" id="userlist" rows="5"></textarea>
       </div>
       <button id="user_submit_button" type="button" class="btn btn-secondary mt-1">ユーザ一括登録</button>
       <br>
       <h5 class="mt-3">ユーザ一括削除</h5>      
       <div class="mb-1">
         <label for="exampleFormControlTextarea1" class="form-label">削除対象の共通認証IDを入力(改行で複数削除)</label>
-        <textarea style="width: 70%;" class="form-control" id="deluserlist" rows="10"></textarea>
+        <textarea style="width: 70%;" class="form-control" id="deluserlist" rows="5"></textarea>
       </div>
       <button id="user_delete_button" type="button" class="btn btn-danger mt-1">ユーザ一括削除</button>
 

@@ -1,13 +1,10 @@
-import sqlite3,json,datetime
-import random,string
-import json
 import subprocess
 import hashlib
 import mysql.connector
 
-DB_SERVER = '192.168.200.100'
+DB_SERVER = '127.0.0.1'
 DB_NAME = 'pcc_cas'
-DB_PASSWD = 'Minecraft7010'
+DB_PASSWD = 'Kusopass'
 TABLE_NAME = 'pcc_users'
 TOKEN_SIZE = 64
 INIT_SQL_COMMAND = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.{TABLE_NAME} (
@@ -43,6 +40,7 @@ def sqlExecute(conn,sql:str):
     c = conn.cursor()
     c.execute(sql)
     res = c.fetchall()
+    conn.commit()
     c.close()
     return res
 
@@ -58,77 +56,85 @@ def discord_message(message:str,uname:str):
 #################################################################
 
 #新規ユーザを作成する
-def create_new_user(conn,uname:str,grade:str,mesc:str,displayname:str,passwd:str,email:str,discord:str,post:str,setting_token:str):
+def create_new_user(conn,uname:str,grade:str,mesc:str,displayname:str,passwd:str,email:str,discord:str,post:str):
     c = conn.cursor()
     #テーブルがなければ作成
     c.execute(INIT_SQL_COMMAND)
     c.close()
+    #役職名を設定
+    if post == '0':
+        post = 'なし'
+    elif post == '1':
+        post = '部長'
+    elif post == '2':
+        post = '副部長'
+    elif post == '3':
+        post = '会計'
+    elif post == '4':
+        post = '基幹システム班'
+    else:
+        post = '不明な役職'
+        
     #テーブルに登録情報を記録
-    sql = f'''INSERT IGNORE INTO {TABLE_NAME} VALUES("{uname}","{grade}","{mesc}","{displayname}","{str(hashlib.sha256(passwd.encode('utf-8')).hexdigest())}","{email}","{discord}","{post}","{setting_token}");'''
+    sql = f'''INSERT IGNORE INTO {DB_NAME}.{TABLE_NAME} VALUES("{uname}","{grade}","{mesc}","{displayname}","{str(hashlib.sha256(passwd.encode('utf-8')).hexdigest())}","{email}","{discord}","{post}","NoToken");'''
     c = conn.cursor()
     c.execute(sql)
+    conn.commit()
     c.close()
     return 0
 
 #ユーザーを削除
-def delete_user(uname:str):
-    conn = sqlite3.connect(DB_NAME)
+def delete_user(conn,uname:str):
     c = conn.cursor()
     #ユーザー削除
-    c.execute(f'''DELETE FROM "{TABLE_NAME}" WHERE uname == "{uname}" ''')
+    c.execute(f'''DELETE FROM {TABLE_NAME} WHERE uname = "{uname}";''')
     conn.commit()
     c.close()
 
 #ユーザー登録情報を検索(ユーザー名から)
-def search_userinfo_from_name(uname:str):
-    conn = sqlite3.connect(DB_NAME)
+def search_userinfo_from_name(conn,uname:str):
     c=conn.cursor()
-    c.execute(f'''SELECT * FROM "{TABLE_NAME}" WHERE uname == "{uname}" ''')
+    c.execute(f'''SELECT * FROM {TABLE_NAME} WHERE uname = "{uname}" ''')
     res = c.fetchall()
-    conn.close()
+    c.close()
     return res #ユーザーのレコードを配列として返す
 
 #全ユーザー登録情報一覧
-def get_all_users():
-    conn = sqlite3.connect(DB_NAME)
+def get_all_users(conn):
     c=conn.cursor()
-    sql = '''
-        SELECT * FROM "{TABLE_NAME}"
+    sql = f'''
+        SELECT * FROM {TABLE_NAME}
     '''
     c.execute(sql)
     res = c.fetchall()
+    c.close()
     return res #ユーザー登録情報を配列として返す
 
 #ユーザー登録情報更新
-def update_user_info(uname:str,column:str,new_data:str):
-    conn = sqlite3.connect(DB_NAME)
+def update_user_info(conn,uname:str,column:str,new_data:str):
     c = conn.cursor()
-    prev_userinfo = search_userinfo_from_name(uname)
-
-    sql1 = f'''
-        UPDATE "{TABLE_NAME}" SET "{column}" = "{new_data}" WHERE name = "{uname}"
+    sql = f'''
+        UPDATE {TABLE_NAME} SET {column} = "{new_data}" WHERE uname = "{uname}"
     '''
-    c.execute(sql1)
+    c.execute(sql)
     conn.commit()
+    c.close()
 
 #有効なトークンの有効性検証結果とユーザ名の応答
-def cktoken(uname:str,token:str):
-    conn = sqlite3.connect(DB_NAME)
+def cktoken(conn,uname:str,token:str):
     c=conn.cursor()
     #ユーザの登録有無
-    c.execute(f'''SELECT * FROM "{TABLE_NAME}" WHERE uname == "{uname}" ''')
+    c.execute(f'''SELECT * FROM {TABLE_NAME} WHERE uname = "{uname}" ''')
     suser_res = c.fetchall()
     
     #トークンがすでに存在しているか
-    c.execute(f'''SELECT * FROM "{TABLE_NAME}" WHERE setting_token == "{token}" ''')
+    c.execute(f'''SELECT * FROM {TABLE_NAME} WHERE setting_token = "{token}" ''')
     token_res = c.fetchall()
 
     #ログインが正しいか
-    c.execute(f'''SELECT * FROM "{TABLE_NAME}" WHERE uname == "{uname}" AND setting_token == "{token}"''')
+    c.execute(f'''SELECT * FROM {TABLE_NAME} WHERE uname = "{uname}" AND setting_token = "{token}"''')
     usr_token_res = c.fetchall()
-    #レコードのフォーマット↓
-    #name,email,isAdmin,solt,passwd,activate_flag,uuid,accessToken
-    conn.close()
+    c.close()
 
     if len(suser_res) == 0:
         #ユーザ登録なし
@@ -136,22 +142,37 @@ def cktoken(uname:str,token:str):
     else:
         if len(token_res) == 0 : #ほかにログインしている可能性あり
             #nameが存在かつ、NoTokenではないTokenが存在
-            return name,1
+            return "NoUname",1
         elif str(token_res[0][8]) == "NoToken": #ログインなし/トークンの期限切れ
             #nameが存在かつ、NoTokenである
             return "NoUname",2
         else:#ユーザのトークンが有効(ログイン状態である)
-            name = token_res[0][1]
-            #トークンの時間制限をリセットする処理を書きたい
+            name = token_res[0][0]
             return str(uname),3
 
 #トークン更新
-def update_token(uname:str,new_token:str):
-    conn = sqlite3.connect(DB_NAME)
+def update_token(conn,uname:str,new_token:str):
     c = conn.cursor()
 
     sql1 = f'''
-        UPDATE "{TABLE_NAME}" SET setting_token = "{new_token}" WHERE uname = "{uname}"
+        UPDATE {TABLE_NAME} SET setting_token = "{new_token}" WHERE uname = "{uname}"
     '''
     c.execute(sql1)
     conn.commit()
+    c.close()
+
+#ユーザのパスワード未変更を検出
+def ckpwdchange(conn,uname:str):
+    res = search_userinfo_from_name(conn,uname)
+    if len(res) == 0:
+        return 1
+    uname_hash = hashlib.sha256(uname.encode('utf-8')).hexdigest()
+    applied_passwd = res[0][4] #現在設定されているパスワード
+    old_temp_passwd_hash = uname_hash #初期パスワード(改定前)
+    new_temp_passwd = 'Kusopass@'+uname[1:]
+    new_temp_passwd_hash = hashlib.sha256(new_temp_passwd.encode('utf-8')).hexdigest() #初期パスワード(改定後)
+
+    if applied_passwd == old_temp_passwd_hash or applied_passwd == new_temp_passwd_hash:
+        return 1 #パスワードが未変更
+    else:
+        return 0
