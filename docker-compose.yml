@@ -15,8 +15,8 @@ services:
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
       - ./mysql:/var/lib/mysql
 
-  flask:
-    container_name: flask
+  pcc-cas:
+    container_name: pcc-cas
     hostname: pcc-cas
     build:
       context: .
