@@ -1,6 +1,7 @@
 services:
   mysql:
     image: mysql:latest
+    restart: always
     container_name: pcc-cas-db
     platform: linux/amd64
     ports:
