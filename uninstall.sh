@@ -1,6 +1,4 @@
 #!/bin/bash
 
-docker stop pcc-cas
-docker rm pcc-cas
-docker rmi pcc-cas
-docker volume remove pcc-cas
+docker-compose stop
+docker system prune
