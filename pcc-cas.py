@@ -287,6 +287,67 @@ def sqlexecute():
     data = {'content':result}
     return data['content'],200
 
+@app.route('/auth',methods=['POST'])
+def auth():
+    
+    res = request.json
+    uname = res['username']
+    passwd_hash = res['password']
+
+    uinfo = dbc.search_userinfo_from_name(conn,uname)
+    
+    if len(uinfo) != 0:
+        if(uinfo[0][4] == passwd_hash):
+            passwd_flag = True
+        else:
+            passwd_flag = False
+
+        print(uinfo[0][4])
+        print(passwd_hash)
+
+        if passwd_flag == True: #パスワードがあっている
+            grade = uinfo[0][1]
+            print(grade)
+            mesc = uinfo[0][2]
+            print(mesc)
+            displayname = uinfo[0][3]
+            print(displayname)
+            discord_id = uinfo[0][6]
+            print(discord_id)
+            post = uinfo[0][7]
+            print(post)
+
+            result = {"login_status":0,
+                      "username":uname,
+                      "displayame":displayname,
+                      "post":post,
+                      "grade":grade,
+                      "mesc":mesc,
+                      "discord_id":discord_id
+                      }
+        else:
+            result = {"login_status":1,
+                        "username":'NoUname',
+                        "displayname":'NoDisplayname',
+                        "post":'NoPost',
+                        "grade":'NoGrade',
+                        "mesc":'NoMESC',
+                        "discord_id":'NoDiscord'
+                        }
+    else:
+        result = {"login_status":1,
+                    "username":'NoUname',
+                    "displayname":'NoDisplayname',
+                    "post":'NoPost',
+                    "grade":'NoGrade',
+                    "mesc":'NoMESC',
+                    "discord_id":'NoDiscord'
+                    }
+        
+    json_data = json.dumps(result)
+    print("DEBUG")
+    return json_data,200
+
 
 init(conn)
 print("Access: http://localhost:8080/")
