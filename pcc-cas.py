@@ -285,7 +285,6 @@ def sqlexecute():
     sqlcmd = str(request.json['sqlcmd'])
     result = dbc.sqlExecute(conn,sqlcmd)
     data = {'content':result}
-    print(data['content'])
     return data['content'],200
 
 

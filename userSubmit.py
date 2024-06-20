@@ -7,7 +7,6 @@ def userSubmit(conn):
 
     for row in file:
         dbc.create_new_user(conn,row[0],row[1],row[2],row[3],"Kusopass@"+row[0][1:],row[0][:7]+"@edu.asahikawa-nct.ac.jp","未設定",row[4])
-        print(f'Kusopass@{row[0][1:]}')
     csvfile.close()
 
 def userDelete(conn):
