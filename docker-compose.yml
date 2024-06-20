@@ -13,3 +13,17 @@ services:
     volumes:
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
       - ./mysql:/var/lib/mysql
+
+    flask:
+      container_name: flask
+      build:
+        context: .
+        dockerfile: Dockerfile
+      depends_on:
+        - "mysql"
+      ports:
+        - 8080:8080
+      restart: always
+      tty: true
+      volumes:
+        - .:/PCC_CAS
