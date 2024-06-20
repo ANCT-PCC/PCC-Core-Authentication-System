@@ -73,7 +73,7 @@ def create_new_user(conn,uname:str,grade:str,mesc:str,displayname:str,passwd:str
     elif post == '4':
         post = '基幹システム班'
     else:
-        post = '不明な役職'
+        post = 'その他の役職'
         
     #テーブルに登録情報を記録
     sql = f'''INSERT IGNORE INTO {DB_NAME}.{TABLE_NAME} VALUES("{uname}","{grade}","{mesc}","{displayname}","{str(hashlib.sha256(passwd.encode('utf-8')).hexdigest())}","{email}","{discord}","{post}","NoToken");'''
