@@ -1,8 +1,9 @@
 import json,requests,hashlib
 
 #接続先情報
-CAS_ADDR = 'http://localhost:8080/auth'
+CAS_ADDR = 'https://testenv.nemnet-lab.net/auth'
 
+#通常はこちらを使う
 def Authenticate(username:str,password:str):
     passwd_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
     headers = {"Content-Type": "application/json"}
@@ -12,5 +13,8 @@ def Authenticate(username:str,password:str):
     }
     jsondata = json.dumps(data)
     res = requests.post(url=CAS_ADDR,data=jsondata,headers=headers)
-    print(res.status_code)
-    print(res.json())
+
+    result = res.json()
+    status_code = res.status_code
+
+    return status_code,result

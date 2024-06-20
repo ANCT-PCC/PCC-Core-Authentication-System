@@ -319,7 +319,7 @@ def auth():
 
             result = {"login_status":0,
                       "username":uname,
-                      "displayame":displayname,
+                      "displayname":displayname,
                       "post":post,
                       "grade":grade,
                       "mesc":mesc,
