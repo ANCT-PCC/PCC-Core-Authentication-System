@@ -2,7 +2,7 @@ import subprocess
 import hashlib
 import mysql.connector
 
-DB_SERVER = '127.0.0.1'
+DB_SERVER = 'pcc-cas-db'
 DB_NAME = 'pcc_cas'
 DB_PASSWD = 'Kusopass'
 TABLE_NAME = 'pcc_users'

@@ -1,6 +1,7 @@
 services:
   mysql:
     image: mysql:latest
+    hostname: pcc-cas-db
     restart: always
     container_name: pcc-cas-db
     platform: linux/amd64
@@ -14,16 +15,17 @@ services:
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
       - ./mysql:/var/lib/mysql
 
-#  flask:
-#    container_name: flask
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    depends_on:
-#      - "mysql"
-#    ports:
-#      - 8080:8080
-#    restart: always
-#    tty: true
-#    volumes:
-#      - ./running:/PCC_CAS
+  flask:
+    container_name: flask
+    hostname: pcc-cas
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - "mysql"
+    ports:
+      - 8080:8080
+    restart: always
+    tty: true
+    volumes:
+      - ./running:/PCC_CAS
