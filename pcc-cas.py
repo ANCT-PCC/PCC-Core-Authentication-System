@@ -353,6 +353,14 @@ def auth():
     json_data = json.dumps(result)
     return json_data,200
 
+#########################################
+
+# 他のシステムからのユーザ関係の情報照会
+
+#########################################
+
+
+
 
 init(conn)
 print("Access: http://localhost:8080/")
