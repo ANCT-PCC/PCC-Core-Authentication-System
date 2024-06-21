@@ -13,6 +13,7 @@ VERSION = 'ver 1.0'
 
 #DB接続開始
 conn = dbc.startConnection()
+#connauth = dbc.startAuthConnection()
 
 #初期化処理
 def init(conn):
@@ -294,32 +295,22 @@ def auth():
     system_token = res['system_token']
     uname = res['username']
     passwd_hash = res['password']
-
-    uinfo = dbc.search_userinfo_from_name(conn,uname)
-
     sysTokenFlag = dbc.ckSystemToken(conn,system_token=system_token)
 
     if sysTokenFlag == True:
+        uinfo = dbc.search_userinfo_from_name(conn,uname)
         if len(uinfo) != 0:
             if(uinfo[0][4] == passwd_hash):
                 passwd_flag = True
             else:
                 passwd_flag = False
 
-            print(uinfo[0][4])
-            print(passwd_hash)
-
             if passwd_flag == True: #パスワードがあっている
                 grade = uinfo[0][1]
-                print(grade)
                 mesc = uinfo[0][2]
-                print(mesc)
                 displayname = uinfo[0][3]
-                print(displayname)
                 discord_id = uinfo[0][6]
-                print(discord_id)
                 post = uinfo[0][7]
-                print(post)
 
                 result = {"login_status":0,
                         "username":uname,
@@ -349,13 +340,13 @@ def auth():
                         }
     else:
         result = {"login_status":1,
-                            "username":'NoUname',
-                            "displayname":'NoDisplayname',
-                            "post":'NoPost',
-                            "grade":'NoGrade',
-                            "mesc":'NoMESC',
-                            "discord_id":'NoDiscord'
-                            }
+                  "username":'NoUname',
+                  "displayname":'NoDisplayname',
+                  "post":'NoPost',
+                  "grade":'NoGrade',
+                  "mesc":'NoMESC',
+                  "discord_id":'NoDiscord'
+                  }
         
     json_data = json.dumps(result)
     print("DEBUG")

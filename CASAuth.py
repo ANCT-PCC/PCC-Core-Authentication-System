@@ -2,6 +2,7 @@ import json,requests,hashlib
 
 #接続先情報
 CAS_ADDR = 'https://testenv.nemnet-lab.net/auth'
+#CAS_ADDR='http://127.0.0.1:8080/auth'
 
 #通常はこちらを使う
 def Authenticate(username:str,password:str,system_token:str):

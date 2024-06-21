@@ -4,6 +4,7 @@ import mysql.connector
 import string,random
 
 DB_SERVER = 'pcc-cas-db'
+#DB_SERVER='127.0.0.1'
 DB_NAME = 'pcc_cas'
 DB_PASSWD = 'Kusopass'
 TABLE_NAME = 'pcc_users'
@@ -208,7 +209,7 @@ def generateAccessToken(conn,system_name:str):
 #基幹システム連携用トークンの有効性検証
 def ckSystemToken(conn,system_token):
     c=conn.cursor()
-    c.execute(f'''SELECT status from pcc_systems_token WHERE system_token = {system_token}''')
+    c.execute(f'''SELECT * from {DB_NAME}.pcc_systems_token WHERE system_token = "{system_token}"''')
     res = c.fetchall()
     conn.commit()
     c.close()
