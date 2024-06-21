@@ -23,6 +23,8 @@ def init(conn):
     #テーブルがなければ作成
     c.execute(dbc.INIT_SQL_COMMAND)
     conn.commit()
+    c.execute(dbc.INIT_SQL_COMMAND_2)
+    conn.commit()
     c.close()
     res = dbc.sqlExecute(conn,command)
     print(f"\nアクセストークン初期化を実行\n")
@@ -349,7 +351,6 @@ def auth():
                   }
         
     json_data = json.dumps(result)
-    print("DEBUG")
     return json_data,200
 
 

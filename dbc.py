@@ -8,6 +8,7 @@ DB_SERVER = 'pcc-cas-db'
 DB_NAME = 'pcc_cas'
 DB_PASSWD = 'Kusopass'
 TABLE_NAME = 'pcc_users'
+TABLE_NAME_TOKEN = 'pcc_systems_token'
 TOKEN_SIZE = 64
 INIT_SQL_COMMAND = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.{TABLE_NAME} (
     uname VARCHAR(255) NOT NULL PRIMARY KEY,
@@ -19,6 +20,10 @@ INIT_SQL_COMMAND = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.{TABLE_NAME} (
     discord TEXT,
     post TEXT,
     setting_token TEXT
+    ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'''
+INIT_SQL_COMMAND_2 = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.pcc_systems_token (
+    system_name VARCHAR(255) NOT NULL PRIMARY KEY,
+    system_token TEXT
     ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'''
 
 #MySQL接続
@@ -188,13 +193,9 @@ def randomname(TOKEN_SIZE):
 def generateAccessToken(conn,system_name:str):
     system_token = randomname(TOKEN_SIZE)
 
-    create_tokentable_query = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.pcc_systems_token (
-    system_name VARCHAR(255) NOT NULL PRIMARY KEY,
-    system_token TEXT
-    ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'''
-
+    #テーブルをなければ作る
     c = conn.cursor()
-    c.execute(create_tokentable_query)
+    c.execute(INIT_SQL_COMMAND_2)
     conn.commit()
 
     save_token = f'''INSERT IGNORE INTO {DB_NAME}.pcc_systems_token VALUES(
@@ -209,7 +210,7 @@ def generateAccessToken(conn,system_name:str):
 #基幹システム連携用トークンの有効性検証
 def ckSystemToken(conn,system_token):
     c=conn.cursor()
-    c.execute(f'''SELECT * from {DB_NAME}.pcc_systems_token WHERE system_token = "{system_token}"''')
+    c.execute(f'''SELECT * from pcc_systems_token WHERE system_token = "{system_token}"''')
     res = c.fetchall()
     conn.commit()
     c.close()
