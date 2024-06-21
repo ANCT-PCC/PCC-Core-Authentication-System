@@ -1,6 +1,7 @@
 import subprocess
 import hashlib
 import mysql.connector
+import string,random
 
 DB_SERVER = 'pcc-cas-db'
 DB_NAME = 'pcc_cas'
@@ -43,11 +44,6 @@ def sqlExecute(conn,sql:str):
     conn.commit()
     c.close()
     return res
-
-def discord_message(message:str,uname:str):
-    command = ["python","send_discord.py",message,uname]
-    subprocess.Popen(command)
-    
 
 #################################################################
 
@@ -176,3 +172,48 @@ def ckpwdchange(conn,uname:str):
         return 1 #パスワードが未変更
     else:
         return 0
+
+#################################################################
+
+#基幹システム連携関連
+
+#################################################################
+
+#ランダムトークン生成
+def randomname(TOKEN_SIZE):
+   return ''.join(random.choices(string.ascii_letters + string.digits, k=TOKEN_SIZE))
+
+#基幹システム連携用のトークン発行
+def generateAccessToken(conn,system_name:str):
+    system_token = randomname(TOKEN_SIZE)
+
+    create_tokentable_query = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.pcc_systems_token (
+    system_name VARCHAR(255) NOT NULL PRIMARY KEY,
+    system_token TEXT
+    ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'''
+
+    c = conn.cursor()
+    c.execute(create_tokentable_query)
+    conn.commit()
+
+    save_token = f'''INSERT IGNORE INTO {DB_NAME}.pcc_systems_token VALUES(
+        "{system_name}","{system_token}"
+    );'''
+    c.execute(save_token)
+    conn.commit()
+    c.exit()
+
+    return system_token
+
+#基幹システム連携用トークンの有効性検証
+def ckSystemToken(conn,system_token):
+    c=conn.cursor()
+    c.execute(f'''SELECT status from pcc_systems_token WHERE system_token = {system_token}''')
+    res = c.fetchall()
+    conn.commit()
+    c.close()
+
+    if len(res) == 0:
+        return False
+    else:
+        return True

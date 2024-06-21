@@ -291,6 +291,7 @@ def sqlexecute():
 def auth():
     
     res = request.json
+    system_token = res['system_token']
     uname = res['username']
     passwd_hash = res['password']
 
