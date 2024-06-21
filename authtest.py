@@ -8,7 +8,8 @@ uname = input('ユーザ名 > ')
 passwd = input('パスワード > ')
 
 #ここで認証を行う
-status,res = CASAuth.Authenticate(uname,password=passwd)
+TOKEN = 'QzwOTDoliIopxCIoQLpvVU9Edn71LnyMAl17HeFByuFev1s0Q3D60tstQ5ib1caS'
+status,res = CASAuth.Authenticate(uname,password=passwd,system_token=TOKEN)
 
 print(f'status_code: {status}')
 print(f'json: {res}')
