@@ -1,4 +1,5 @@
 #!/bin/bash
 
 docker-compose stop
-docker system prune
+docker rm pcc-cas
+docker rmi pcc-core-authentication-system-pcc-cas

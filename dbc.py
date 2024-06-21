@@ -201,7 +201,7 @@ def generateAccessToken(conn,system_name:str):
     );'''
     c.execute(save_token)
     conn.commit()
-    c.exit()
+    c.close()
 
     return system_token
 
