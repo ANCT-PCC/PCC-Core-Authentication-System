@@ -12,11 +12,13 @@ PCC-CASとは、Personal Computer Club-Core Authentication System(パソコン�
 認証結果を受け取り、PCC-CASからの認証情報を使って各自データ処理する。
 
 ## 認証モジュールの使い方
+細かい説明は、CASAuth.pyとauthtest.pyにコメントアウトしている  
 pip install requests を実行  
 CASAuth.pyをインポートする。  
 CASAuth.Authentication()で認証する。  
 引数は「username:str,password:str」で  
 passwordには、生の値をぶち込む。(ハッシュ化は自動でやってくれます)  
+system_tokenには、PCC-CAS管理者から発行された値を入れる。
 
 認証結果として、以下の形式でjsonが返ってくる  
 {  

@@ -4,7 +4,7 @@ import json,requests,hashlib
 CAS_ADDR = 'https://testenv.nemnet-lab.net/auth'
 #CAS_ADDR='http://127.0.0.1:8080/auth'
 
-#通常はこちらを使う
+#この関数で認証を行います
 def Authenticate(username:str,password:str,system_token:str):
     passwd_hash = hashlib.sha256(password.encode('utf-8')).hexdigest()
     headers = {"Content-Type": "application/json"}
