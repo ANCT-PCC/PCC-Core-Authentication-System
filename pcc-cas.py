@@ -313,8 +313,21 @@ def auth():
                 displayname = uinfo[0][3]
                 discord_id = uinfo[0][6]
                 post = uinfo[0][7]
+                
+                pwdchange = dbc.ckpwdchange(conn,uname)
 
-                result = {"login_status":0,
+                if pwdchange == 1:
+                    result= {"login_status":2,
+                        "username":uname,
+                        "displayname":displayname,
+                        "post":post,
+                        "grade":grade,
+                        "mesc":mesc,
+                        "discord_id":discord_id
+                        }
+                    
+                else:
+                    result = {"login_status":0,
                         "username":uname,
                         "displayname":displayname,
                         "post":post,
@@ -359,8 +372,49 @@ def auth():
 
 #########################################
 
+@app.route('/getuserinfo',methods=['GET'])
+def getuserinfo():
+    uname = request.json['username']
+    system_token = request.json['system_token']
+    print(system_token)
+    tokenFlag = dbc.ckSystemToken(conn,system_token=system_token)
+    if tokenFlag == True:
+        res = dbc.search_userinfo_from_name(conn=conn,uname=uname)
+        if len(res) == 0:
+            return []
+        
+        uinfo = []
+        for i in range(10):
+            print(i)
+            if i == 4 or i == 8:
+                continue
+            uinfo.append(res[0][i])
 
+        return json.dumps(uinfo)
+    else:
+        return None
+    
+@app.route('/getalluserinfo',methods=['GET'])
+def getalluserinfo():
+    system_token = request.json['system_token']
 
+    tokenFlag = dbc.ckSystemToken(conn,system_token=system_token)
+    if tokenFlag == True:
+        res = dbc.get_all_users(conn=conn)
+        if len(res) == 0:
+            return []
+        
+        uinfo = [[] for _ in range(len(res))]
+        for i in range(len(res)):
+            for j in range(10):
+                if j == 4 or j == 8:
+                    continue
+                else:
+                    uinfo[i].append(res[i][j])
+
+        return json.dumps(uinfo)
+    else:
+        return None
 
 init(conn)
 print("Access: http://localhost:8080/")

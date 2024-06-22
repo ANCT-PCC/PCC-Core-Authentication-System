@@ -19,7 +19,8 @@ INIT_SQL_COMMAND = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.{TABLE_NAME} (
     email TEXT,
     discord TEXT,
     post TEXT,
-    setting_token TEXT
+    setting_token TEXT,
+    changedpwd TEXT
     ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'''
 INIT_SQL_COMMAND_2 = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.pcc_systems_token (
     system_name VARCHAR(255) NOT NULL PRIMARY KEY,
@@ -78,7 +79,7 @@ def create_new_user(conn,uname:str,grade:str,mesc:str,displayname:str,passwd:str
         post = 'その他の役職'
         
     #テーブルに登録情報を記録
-    sql = f'''INSERT IGNORE INTO {DB_NAME}.{TABLE_NAME} VALUES("{uname}","{grade}","{mesc}","{displayname}","{str(hashlib.sha256(passwd.encode('utf-8')).hexdigest())}","{email}","{discord}","{post}","NoToken");'''
+    sql = f'''INSERT IGNORE INTO {DB_NAME}.{TABLE_NAME} VALUES("{uname}","{grade}","{mesc}","{displayname}","{str(hashlib.sha256(passwd.encode('utf-8')).hexdigest())}","{email}","{discord}","{post}","NoToken","False");'''
     c = conn.cursor()
     c.execute(sql)
     conn.commit()
@@ -115,6 +116,14 @@ def get_all_users(conn):
 #ユーザー登録情報更新
 def update_user_info(conn,uname:str,column:str,new_data:str):
     c = conn.cursor()
+
+    if column == 'passwd':
+        sql = f'''
+            UPDATE {TABLE_NAME} SET changedpwd = "True" WHERE uname = "{uname}"
+        '''
+        c.execute(sql)
+        conn.commit()
+
     sql = f'''
         UPDATE {TABLE_NAME} SET {column} = "{new_data}" WHERE uname = "{uname}"
     '''
@@ -166,16 +175,8 @@ def update_token(conn,uname:str,new_token:str):
 #ユーザのパスワード未変更を検出
 def ckpwdchange(conn,uname:str):
     res = search_userinfo_from_name(conn,uname)
-    if len(res) == 0:
+    if res[0][9] == "False":
         return 1
-    uname_hash = hashlib.sha256(uname.encode('utf-8')).hexdigest()
-    applied_passwd = res[0][4] #現在設定されているパスワード
-    old_temp_passwd_hash = uname_hash #初期パスワード(改定前)
-    new_temp_passwd = 'Kusopass@'+uname[1:]
-    new_temp_passwd_hash = hashlib.sha256(new_temp_passwd.encode('utf-8')).hexdigest() #初期パスワード(改定後)
-
-    if applied_passwd == old_temp_passwd_hash or applied_passwd == new_temp_passwd_hash:
-        return 1 #パスワードが未変更
     else:
         return 0
 
