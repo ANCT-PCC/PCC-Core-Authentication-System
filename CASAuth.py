@@ -1,8 +1,7 @@
 import json,requests,hashlib
 
 #接続先情報
-CAS_ADDR = 'https://testenv.nemnet-lab.net/auth'
-#CAS_ADDR='http://127.0.0.1:8080/auth'
+CAS_ADDR = 'https://pcc-cas.nemnet-lab.net/auth'
 
 #この関数で認証を行います
 def Authenticate(username:str,password:str,system_token:str):

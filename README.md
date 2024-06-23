@@ -11,6 +11,13 @@ PCC-CASとは、Personal Computer Club-Core Authentication System(パソコン�
 他のシステムは、専用のPythonモジュールなどを用いて  
 認証結果を受け取り、PCC-CASからの認証情報を使って各自データ処理する。
 
+## 各基幹システムでPCC-CASを使う方法
+Python3で、「CASAuth.py」と「CAS_userLib.py」をインポートする。  
+「CASAuth.py」は、ユーザの認証を行うモジュール。  
+「CAS_userLib.py」は、PCC-CASに登録されているユーザ情報を参照するためのモジュール。  
+  
+「authtest.py」には、「CASAuth.py」の使い方を実際のコードで紹介しているので、みてほしい
+
 ## 認証モジュールの使い方
 細かい説明は、CASAuth.pyとauthtest.pyにコメントアウトしている  
 pip install requests を実行  

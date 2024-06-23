@@ -8,7 +8,9 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: Kusopass
+    #######################################################
+      MYSQL_ROOT_PASSWORD: Kusopass #本番環境ではここを変更する
+    #######################################################
       MYSQL_DATABASE: pcc_cas
       TZ: "Asia/Tokyo"
     volumes:
