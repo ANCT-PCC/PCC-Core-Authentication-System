@@ -293,7 +293,7 @@ def sqlexecute():
 @app.route('/auth',methods=['POST'])
 def auth():
     
-    res = request.json
+    res = request.json[0]
     system_token = res['system_token']
     uname = res['username']
     passwd_hash = res['password']
