@@ -8,7 +8,7 @@ uname = input('ユーザ名 > ')
 passwd = input('パスワード > ')
 
 #ここで認証を行う
-TOKEN = 'トークンをここに'
+TOKEN = input('システムトークンを入力: > ')
 status,res = CASAuth.Authenticate(uname,password=passwd,system_token=TOKEN)
 
 print(f'status_code: {status}')
