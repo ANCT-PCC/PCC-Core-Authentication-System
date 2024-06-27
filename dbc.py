@@ -7,7 +7,7 @@ DB_SERVER = 'pcc-cas-db'
 #DB_SERVER='127.0.0.1'
 DB_NAME = 'pcc_cas'
 ###############################################
-DB_PASSWD = 'Kusopass' #本番環境ではここを変更する
+DB_PASSWD = 'N1tacPcc2024@' #本番環境ではここを変更する
 ###############################################
 TABLE_NAME = 'pcc_users'
 TABLE_NAME_TOKEN = 'pcc_systems_token'

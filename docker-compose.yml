@@ -31,3 +31,5 @@ services:
     tty: true
     volumes:
       - ./running:/PCC_CAS
+    environment:
+      TZ: "Asia/Tokyo"
