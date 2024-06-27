@@ -9,7 +9,7 @@ import userSubmit
 
 TOKEN_SIZE = 64 #トークンのサイズ
 COOKIE_AGE = 0.5 #Cookieの有効期限(単位:h)
-VERSION = 'ver 1.0'
+VERSION = 'ver 1.1'
 
 #DB接続開始
 conn = dbc.startConnection()
@@ -24,6 +24,8 @@ def init(conn):
     c.execute(dbc.INIT_SQL_COMMAND)
     conn.commit()
     c.execute(dbc.INIT_SQL_COMMAND_2)
+    conn.commit()
+    c.execute(dbc.INIT_SQL_COMMAND_3)
     conn.commit()
     c.close()
     res = dbc.sqlExecute(conn,command)
@@ -365,6 +367,16 @@ def auth():
         
     json_data = json.dumps(result)
     return json_data,200
+
+#キープアライブ
+@app.route('/keepalv')
+def keepalv():
+    sql = f'''
+        SELECT keepalive from {dbc.DB_NAME}.keepalive
+        '''
+    res = dbc.sqlExecute(conn,sql)
+
+    return json.dumps({'contents':res}),200
 
 #########################################
 

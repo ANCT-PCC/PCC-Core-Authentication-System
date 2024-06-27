@@ -1,4 +1,3 @@
-import subprocess
 import hashlib
 import mysql.connector
 import string,random
@@ -7,7 +6,7 @@ DB_SERVER = 'pcc-cas-db'
 #DB_SERVER='127.0.0.1'
 DB_NAME = 'pcc_cas'
 ###############################################
-DB_PASSWD = 'N1tacPcc2024@' #本番環境ではここを変更する
+DB_PASSWD = 'Kusopass' #本番環境ではここを変更する
 ###############################################
 TABLE_NAME = 'pcc_users'
 TABLE_NAME_TOKEN = 'pcc_systems_token'
@@ -27,6 +26,10 @@ INIT_SQL_COMMAND = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.{TABLE_NAME} (
 INIT_SQL_COMMAND_2 = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.pcc_systems_token (
     system_name VARCHAR(255) NOT NULL PRIMARY KEY,
     system_token TEXT
+    ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'''
+
+INIT_SQL_COMMAND_3 = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.keepalive (
+    keepalive TEXT
     ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'''
 
 #MySQL接続
