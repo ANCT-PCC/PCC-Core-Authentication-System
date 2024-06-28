@@ -1,6 +1,6 @@
 import requests
 
-url = 'http://localhost:8080/keepalv'
+url = 'http://pcc-cas.nemnet-lab.net/keepalv'
 headers = {"Content-Type": "application/json"}
 res  = requests.get(url=url,headers=headers)
 
