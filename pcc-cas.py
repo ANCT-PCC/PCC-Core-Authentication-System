@@ -374,7 +374,7 @@ def keepalv():
     sql = f'''
         INSERT IGNORE INTO {dbc.DB_NAME}.keepalive VALUES('{datetime.datetime.now().strftime('%Y年%m月%d日 %H:%M')}')
         '''
-    res = dbc.sqlExecute(conn,True,sql)
+    res = dbc.sqlExecute(conn,sql)
 
     return json.dumps({'contents':res}),200
 
