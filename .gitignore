@@ -3,3 +3,5 @@ mysql
 *.csv
 __pycache__
 GitHub_Token.txt
+pwd_change_check_server.py
+ck_sqlite.py
