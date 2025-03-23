@@ -53,6 +53,14 @@ except FileNotFoundError:
 def get_pw(id):
     return Admin.get(id)
 
+@app.route('/submit')
+def submit():
+    return render_template('submit.html')
+
+@app.route('/submit/veryfi_inputs')
+def veryfi_inputs():
+    return render_template('submit_veryfi.html')
+
 @app.route('/',methods=['GET'])
 def index():
     token = request.cookies.get('token')
