@@ -57,8 +57,14 @@ def get_pw(id):
 def submit():
     return render_template('submit.html')
 
-@app.route('/submit/veryfi_inputs')
+@app.route('/submit/veryfi_inputs',methods=['POST'])
 def veryfi_inputs():
+    user_grade = request.json['grade']
+    user_class = request.json['class']
+    firstname = request.json['firstname']
+    lastname = request.json['lastname']
+    passwd = hashlib.sha256(request.json['password'].encode("utf-8")).hexdigest()
+    discord = request.json['discord_id']
     return render_template('submit_veryfi.html')
 
 @app.route('/',methods=['GET'])

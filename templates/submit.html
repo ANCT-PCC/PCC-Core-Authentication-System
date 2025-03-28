@@ -10,10 +10,6 @@
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sign-in/">
 
-    
-
-    
-
 <link href="{{url_for('static',filename='assets/dist/css/bootstrap.min.css')}}" rel="stylesheet">
 
     <style>
@@ -153,7 +149,7 @@
     <h1 class="h3 mb-3 fw-normal">新規ユーザ登録</h1>
     <p>基幹認証システム-アカウント管理</p>
 
-    <div id="login_status_error" class="alert alert-danger" role="alert">
+    <div id="error_message" class="alert alert-danger" role="alert">
       アラートを表示
     </div>
 
@@ -165,7 +161,7 @@
       </div>
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">学科</label>
-        <input type="text" class="form-control" id="exampleInputPassword1">
+        <input type="text" class="form-control" id="class">
         <div id="emailHelp" class="form-text">「M」:機械システム工学科</div>
         <div id="emailHelp" class="form-text">「E」:電気情報工学科</div>
         <div id="emailHelp" class="form-text">「S」:システム制御情報工学科</div>
@@ -174,46 +170,48 @@
       </div>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">お名前(性)</label>
-        <input type="text" class="form-control" id="grade" aria-describedby="emailHelp">
+        <input type="text" class="form-control" id="firstname" aria-describedby="emailHelp">
         <div id="emailHelp" class="form-text">入力例: 「山本」</div>
       </div>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">お名前(名)</label>
-        <input type="text" class="form-control" id="grade" aria-describedby="emailHelp">
+        <input type="text" class="form-control" id="lastname" aria-describedby="emailHelp">
         <div id="emailHelp" class="form-text">入力例: 「太郎」</div>
       </div>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">パスワード</label>
-        <input type="password" class="form-control" id="grade" aria-describedby="emailHelp">
+        <input type="password" class="form-control" id="password" aria-describedby="emailHelp">
         <div id="emailHelp" class="form-text">半角英数字、8文字以上で</div>
       </div>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">パスワード(確認)</label>
-        <input type="password" class="form-control" id="grade" aria-describedby="emailHelp">
+        <input type="password" class="form-control" id="password_retype" aria-describedby="emailHelp">
         <div id="emailHelp" class="form-text">半角英数字、8文字以上で</div>
       </div>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Discordユーザ名</label>
-        <input type="text" class="form-control" id="grade" aria-describedby="emailHelp">
+        <input type="text" class="form-control" id="discord_id" aria-describedby="emailHelp">
         <div id="emailHelp" class="form-text">Discordのアカウントを持っていない場合は、作ってください。</div>
         <div id="emailHelp" class="form-text">旭川高専パソコン部のDiscordサーバに入ってもらいます。</div>
       </div>
+
       <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <input type="checkbox" class="form-check-input" id="eura">
         <label class="form-check-label" for="exampleCheck1">「提供情報の利用について」に同意します。</label>
       </div>
-      <button type="submit" class="btn btn-primary">登録する</button>
+      
+      <button id="next_button" type="button" class="btn btn-primary">次へ進む</button>
     </form>
     
     <ol class="breadcrumb mt-3">
-      <li class="breadcrumb-item"><a href="/admintools/top">すでにアカウントをお持ちの方</a></li>
+      <li class="breadcrumb-item"><a href="/">すでにアカウントをお持ちの方</a></li>
     </ol>
     <p class="mt-5 mb-3 text-body-secondary">&copy; 旭川高専パソコン部 2024</p>
   </form>
 </main>
 <script src="{{url_for('static',filename='assets/dist/js/bootstrap.bundle.min.js')}}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script src="{{url_for('static',filename='login.js')}}"></script>
+<script src="{{url_for('static',filename='submit.js')}}"></script>
 
     </body>
 </html>
