@@ -1,4 +1,4 @@
-const SERVER_ADDR = 'http://localhost:8080/'
+const SERVER_ADDR = 'https://test-cas.nemnet-lab.net/'
 const $SQL_EXECUTE = document.getElementById('sqlexecute_button') 
 const $SQL_RESULT = document.getElementById('sqlresult')
 const $SQL_CMD = document.getElementById('sqlcmd')

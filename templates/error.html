@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.112.5">
-    <title>入力内容の確認/基幹認証システム PCC-CAS</title>
+    <title>ログイン/基幹認証システム PCC-CAS</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sign-in/">
 
@@ -149,63 +149,24 @@
     
 <main class="form-signin  form-control w-100 m-auto">
   <form>
-    <div class="alert alert-primary" role="alert">
-      入力内容を確認し、「内容を確認して登録する」を押してください。
+    <img class="mb-4" src="{{url_for('static',filename='assets/PCC-CAS-logo.png')}}" alt="" width="300" height="100">
+    <h1 class="h3 mb-3 fw-normal">無効なリクエストです。</h1>
+    <p>URLの期限が切れているか、リクエストの内容が間違っています。</p>
+
+    <div id="login_status_error" class="alert alert-primary" role="alert">
+      リクエストの内容が正しいと考えられる場合は、システム管理者に連絡してください。
+      Email: system.anctpcc@gmail.com
     </div>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">学年(半角数字)</label>
-      <input type="text" class="form-control" id="grade" aria-describedby="emailHelp" placeholder="{{user_grade}}" disabled>
-      <div id="emailHelp" class="form-text">入力例: 「1」「2」など。「年生」の文字列は不要</div>
-    </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">学科</label>
-      <input type="text" class="form-control" id="class" placeholder="{{user_class}}" disabled>
-      <div id="emailHelp" class="form-text">「M」:機械システム工学科</div>
-      <div id="emailHelp" class="form-text">「E」:電気情報工学科</div>
-      <div id="emailHelp" class="form-text">「S」:システム制御情報工学科</div>
-      <div id="emailHelp" class="form-text">「C」:物質科学工学科</div>
-      <div id="emailHelp" class="form-text">上記に記載のない学科は、学科名をフルで入力してください</div>
-    </div>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">お名前(性)</label>
-      <input type="text" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="{{firstname}}" disabled>
-      <div id="emailHelp" class="form-text">入力例: 「山本」</div>
-    </div>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">お名前(名)</label>
-      <input type="text" class="form-control" id="lastname" aria-describedby="emailHelp" placeholder="{{lastname}}" disabled>
-      <div id="emailHelp" class="form-text">入力例: 「太郎」</div>
-    </div>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">パスワード</label>
-      <input type="password" class="form-control" id="password" aria-describedby="emailHelp" placeholder="非表示" disabled>
-      <div id="emailHelp" class="form-text">半角英数字、8文字以上で</div>
-    </div>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">パスワード(確認)</label>
-      <input type="password" class="form-control" id="password_retype" aria-describedby="emailHelp" placeholder="非表示" disabled>
-      <div id="emailHelp" class="form-text">半角英数字、8文字以上で</div>
-    </div>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Discordユーザ名</label>
-      <input type="text" class="form-control" id="discord_id" aria-describedby="emailHelp" placeholder="{{discord}}" disabled>
-      <div id="emailHelp" class="form-text">Discordのアカウントを持っていない場合は、作ってください。</div>
-      <div id="emailHelp" class="form-text">旭川高専パソコン部のDiscordサーバに入ってもらいます。</div>
-    </div>
-    
-    <button type="submit" class="btn btn-primary">内容を確認して登録する</button>
-  </form>
-  
-  <ol class="breadcrumb mt-3">
-    <li class="breadcrumb-item"><a href="/admintools/top">すでにアカウントをお持ちの方</a></li>
-  </ol>
-  <p class="mt-5 mb-3 text-body-secondary">&copy; 旭川高専パソコン部 2024</p>
-</form>
+    <br>
+    <ol class="breadcrumb mt-3">
+      <li class="breadcrumb-item"><a href="/">ログイン画面へ戻る</a></li>
+    </ol>
+
+    <p class="mt-5 mb-3 text-body-secondary">&copy; 旭川高専パソコン部 2024</p>
   </form>
 </main>
 <script src="{{url_for('static',filename='assets/dist/js/bootstrap.bundle.min.js')}}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script src="{{url_for('static',filename='login.js')}}"></script>
 
     </body>
 </html>

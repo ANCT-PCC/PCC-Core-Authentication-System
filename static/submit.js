@@ -10,7 +10,7 @@ const $button_next = document.getElementById("next_button");
 const $error_message = document.getElementById("error_message");
 $error_message.style.visibility = 'hidden';
 
-const SERVER_ADDR='http://localhost:8080/'
+const SERVER_ADDR='https://test-cas.nemnet-lab.net/'
 
 $button_next.addEventListener('click',(e) => {
     if ($form_grade.value == '' || $form_class.value == '' || $form_firstname.value == '' || $form_lastname.value == '' || $form_pwd.value == '' || $form_pwd_retype.value == '' || $form_discord.value == ''){
@@ -34,19 +34,20 @@ $button_next.addEventListener('click',(e) => {
     
     $.ajax(
         {
-          url:'http://localhost:8080/'+'/submit/veryfi_inputs',
+          url:'https://test-cas.nemnet-lab.net/'+'/submit/veryfi_inputs',
           type:'POST',
           data:JSON.stringify(form_data), //ここで辞書型からJSONに変換
           dataType: 'json',
           contentType: 'application/json'
-    }).always(function (jqXHR,data) {
+    }).always(function (jqXHR,json) {
         console.log("statuscode::")
         console.log(jqXHR.status);
         if(String(jqXHR.status) === "200"){
             //サーバへの入力データの一時キャッシュ成功
             //内容確認画面へ遷移
-            login_status_error.style.visibility = "hidden";
-            window.location.href = 'http://localhost:8080/';
+            var data = JSON.stringify(json);
+            var form_id = JSON.parse(data)[0]['form_id'];
+            window.location.href = 'https://test-cas.nemnet-lab.net/'+'submit/veryfi_inputs'+form_id;
         }else{
             //サーバサイドエラー
             console.log("サーバサイドエラー")

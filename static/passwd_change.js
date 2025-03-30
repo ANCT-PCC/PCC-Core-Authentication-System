@@ -1,4 +1,4 @@
-const SERVER_ADDR = 'http://localhost:8080/'
+const SERVER_ADDR = 'https://test-cas.nemnet-lab.net/'
 const $logout_button = document.getElementById('logout_button');
 const $changePWD_button = document.getElementById('changePWD_button');
 const $changeSuccess = document.getElementById('changeSuccess');

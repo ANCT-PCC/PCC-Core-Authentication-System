@@ -27,6 +27,8 @@ def init(conn):
     conn.commit()
     c.execute(dbc.INIT_SQL_COMMAND_3)
     conn.commit()
+    c.execute(dbc.INIT_SQL_COMMAND_4)
+    conn.commit()
     c.close()
     res = dbc.sqlExecute(conn,command)
     print(f"\nアクセストークン初期化を実行\n")
@@ -58,14 +60,41 @@ def submit():
     return render_template('submit.html')
 
 @app.route('/submit/veryfi_inputs',methods=['POST'])
-def veryfi_inputs():
-    user_grade = request.json['grade']
-    user_class = request.json['class']
-    firstname = request.json['firstname']
-    lastname = request.json['lastname']
-    passwd = hashlib.sha256(request.json['password'].encode("utf-8")).hexdigest()
-    discord = request.json['discord_id']
-    return render_template('submit_veryfi.html')
+def record_inputs():
+    #フォーム入力内容の取得
+    print(request.json)
+    json_data = request.json[0]
+    user_grade = json_data['grade']
+    user_class = json_data['class']
+    firstname = json_data['firstname']
+    lastname = json_data['lastname']
+    passwd = hashlib.sha256(json_data['password'].encode("utf-8")).hexdigest()
+    discord = json_data['discord_id']
+    #フォーム入力情報のIDを生成。
+    #これをもとにフォーム入力内容の確認と部員登録を行う。
+    form_id = randomname(TOKEN_SIZE=TOKEN_SIZE)
+    #DBに入力内容を一時的に登録
+    dbc.save_form_inputs(conn,form_id=form_id,user_grade=user_grade,user_class=user_class,firstname=firstname,lastname=lastname,passwd=passwd,discord=discord)
+    #フォーム入力情報のIDを返す。
+    data = [{'form_id':form_id}]
+    return json.dumps(data)
+
+@app.route('/submit/veryfi_inputs/<string:form_id>',methods=['GET'])
+def veryfi_inputs(form_id:str):
+    #form_idから、DBに登録されたフォーム入力情報を取得
+    res = dbc.get_form_inputs(conn,form_id=form_id)
+    #form_idがDBに存在しない場合は、エラー画面を返す。
+    if len(res) == 0:
+        return render_template('error.html')
+    #取得した情報を、html内の各変数に設定してhtmlを返す。
+    user_grade = res[0][1]
+    user_class = res[0][2]
+    firstname = res[0][3]
+    lastname = res[0][4]
+    discord = res[0][6]
+    #パスワードは表示しない
+    return render_template('submit_veryfi.html',user_grade=user_grade,user_class=user_class,firstname=firstname,lastname=lastname,passwd='非表示',discord=discord)
+
 
 @app.route('/',methods=['GET'])
 def index():

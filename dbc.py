@@ -31,6 +31,15 @@ INIT_SQL_COMMAND_2 = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.pcc_systems_token 
 INIT_SQL_COMMAND_3 = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.keepalive (
     keepalive TEXT
     ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'''
+INIT_SQL_COMMAND_4 = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.form_inputs (
+    form_id VARCHAR(255) NOT NULL PRIMARY KEY,
+    grade TEXT,
+    class TEXT,
+    firstname TEXT,
+    lastname TEXT,
+    password TEXT,
+    discord TEXT
+    ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'''
 
 #MySQL接続
 def startConnection():
@@ -62,6 +71,28 @@ def sqlExecute(conn,sql:str):
 #ユーザー関連
 
 #################################################################
+
+#新規登録フォームの内容を一時保存
+def save_form_inputs(conn,form_id:str,user_grade:str,user_class:str,firstname:str,lastname:str,passwd:str,discord:str):
+    c = conn.cursor()
+    #テーブルがなければ作成
+    c.execute(INIT_SQL_COMMAND_4)
+    c.close()
+    #テーブルに登録情報を記録
+    sql = f'''INSERT IGNORE INTO {DB_NAME}.form_inputs VALUES("{form_id}","{user_grade}","{user_class}","{firstname}","{lastname}","{str(hashlib.sha256(passwd.encode('utf-8')).hexdigest())}","{discord}");'''
+    c = conn.cursor()
+    c.execute(sql)
+    conn.commit()
+    c.close()
+    return 0
+
+#新規登録フォームの内容を取得
+def get_form_inputs(conn,form_id:str):
+    c = conn.cursor()
+    c.execute(f'''SELECT * FROM {DB_NAME}.form_inputs WHERE form_id = "{form_id}" ''')
+    res = c.fetchall()
+    c.close()
+    return res #入力内容のレコードを配列として返す
 
 #新規ユーザを作成する
 def create_new_user(conn,uname:str,grade:str,mesc:str,displayname:str,passwd:str,email:str,discord:str,post:str):

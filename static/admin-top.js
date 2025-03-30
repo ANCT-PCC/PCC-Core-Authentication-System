@@ -1,4 +1,4 @@
-const SERVER_ADDR = 'http://localhost:8080/'
+const SERVER_ADDR = 'https://test-cas.nemnet-lab.net/'
 const $MOVE_DB = document.getElementById('move_db')
 const $MOVE_USER = document.getElementById('move_user')
 
