@@ -1,11 +1,13 @@
 const $form_grade = document.getElementById("grade");
 const $form_class = document.getElementById("class");
+const $form_number = document.getElementById("number");
 const $form_firstname = document.getElementById("firstname");
 const $form_lastname = document.getElementById("lastname");
 const $form_pwd = document.getElementById("password");
 const $form_pwd_retype = document.getElementById("password_retype");
 const $form_discord = document.getElementById("discord_id");
 const $button_next = document.getElementById("next_button");
+const $eura = document.getElementById("eura");
 
 const $error_message = document.getElementById("error_message");
 $error_message.style.visibility = 'hidden';
@@ -13,16 +15,21 @@ $error_message.style.visibility = 'hidden';
 const SERVER_ADDR='https://test-cas.nemnet-lab.net/'
 
 $button_next.addEventListener('click',(e) => {
-    if ($form_grade.value == '' || $form_class.value == '' || $form_firstname.value == '' || $form_lastname.value == '' || $form_pwd.value == '' || $form_pwd_retype.value == '' || $form_discord.value == ''){
+    if ($form_grade.value == '' || $form_class.value == '' || $form_number.value == '' || $form_firstname.value == '' || $form_lastname.value == '' || $form_pwd.value == '' || $form_pwd_retype.value == '' || $form_discord.value == ''){
         $error_message.textContent = 'すべての項目を入力してください';
         $error_message.style.visibility = 'visible';
     }else if($form_pwd.value !== $form_pwd_retype.value){
         $error_message.textContent = 'パスワードが一致しません';
+        $error_message.style.visibility = 'visible';
+    }else if (!$eura.checked) { // チェックボックスがチェックされているか確認
+        $error_message.textContent = '「提供情報の利用について」に同意してください';
+        $error_message.style.visibility = 'visible';
     }else{
     var form_data = [
         {
         grade: String($form_grade.value),
         class: String($form_class.value),
+        number: String($form_number.value),
         firstname: String($form_firstname.value),
         lastname: String($form_lastname.value),
         password: String($form_pwd.value),

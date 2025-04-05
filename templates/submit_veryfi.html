@@ -167,6 +167,13 @@
       <div id="emailHelp" class="form-text">上記に記載のない学科は、学科名をフルで入力してください</div>
     </div>
     <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">出席番号(半角数字、入学時のもの)</label>
+      <input type="text" class="form-control" id="number" aria-describedby="emailHelp" placeholder="{{user_number}}" disabled>
+      <div id="emailHelp" class="form-text">わからない場合は、担任へ問い合わせてください。</div>
+      <div id="emailHelp" class="form-text">学校のメールアドレスの「@」の左2桁です。</div>
+      <div id="emailHelp" class="form-text">例:「s203120@edu.asahikawa-nct.ac.jp」であれば「20」</div>
+    </div>
+    <div class="mb-3">
       <label for="exampleInputEmail1" class="form-label">お名前(性)</label>
       <input type="text" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="{{firstname}}" disabled>
       <div id="emailHelp" class="form-text">入力例: 「山本」</div>
@@ -193,7 +200,7 @@
       <div id="emailHelp" class="form-text">旭川高専パソコン部のDiscordサーバに入ってもらいます。</div>
     </div>
     
-    <button type="submit" class="btn btn-primary">内容を確認して登録する</button>
+    <button id="submit_inputs" type="button" class="btn btn-primary">内容を確認して登録する</button>
   </form>
   
   <ol class="breadcrumb mt-3">
@@ -205,7 +212,7 @@
 </main>
 <script src="{{url_for('static',filename='assets/dist/js/bootstrap.bundle.min.js')}}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script src="{{url_for('static',filename='login.js')}}"></script>
+<script src="{{url_for('static',filename='submit_inputs.js')}}"></script>
 
     </body>
 </html>

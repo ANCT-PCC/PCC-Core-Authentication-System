@@ -35,6 +35,7 @@ INIT_SQL_COMMAND_4 = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.form_inputs (
     form_id VARCHAR(255) NOT NULL PRIMARY KEY,
     grade TEXT,
     class TEXT,
+    number TEXT,
     firstname TEXT,
     lastname TEXT,
     password TEXT,
@@ -43,13 +44,17 @@ INIT_SQL_COMMAND_4 = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.form_inputs (
 
 #MySQL接続
 def startConnection():
-    conn = mysql.connector.connect(
-        host=DB_SERVER,
-        user='root',
-        password=DB_PASSWD,
-        database=DB_NAME,
-        port='3306'
-    )
+    try:
+        conn = mysql.connector.connect(
+            host=DB_SERVER,
+            user='root',
+            password=DB_PASSWD,
+            database=DB_NAME,
+            port='3306'
+        )
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return None
     return conn
 
 #MySQL切断
@@ -73,13 +78,13 @@ def sqlExecute(conn,sql:str):
 #################################################################
 
 #新規登録フォームの内容を一時保存
-def save_form_inputs(conn,form_id:str,user_grade:str,user_class:str,firstname:str,lastname:str,passwd:str,discord:str):
+def save_form_inputs(conn,form_id:str,user_grade:str,user_class:str,user_number:str,firstname:str,lastname:str,passwd:str,discord:str):
     c = conn.cursor()
     #テーブルがなければ作成
     c.execute(INIT_SQL_COMMAND_4)
     c.close()
     #テーブルに登録情報を記録
-    sql = f'''INSERT IGNORE INTO {DB_NAME}.form_inputs VALUES("{form_id}","{user_grade}","{user_class}","{firstname}","{lastname}","{str(hashlib.sha256(passwd.encode('utf-8')).hexdigest())}","{discord}");'''
+    sql = f'''INSERT IGNORE INTO {DB_NAME}.form_inputs VALUES("{form_id}","{user_grade}","{user_class}","{user_number}","{firstname}","{lastname}","{str(hashlib.sha256(passwd.encode('utf-8')).hexdigest())}","{discord}");'''
     c = conn.cursor()
     c.execute(sql)
     conn.commit()
@@ -93,6 +98,15 @@ def get_form_inputs(conn,form_id:str):
     res = c.fetchall()
     c.close()
     return res #入力内容のレコードを配列として返す
+
+#一時保存した新規登録フォームの内容を削除
+def delete_form_inputs(conn,form_id:str):
+    c = conn.cursor()
+    #ユーザー削除
+    c.execute(f'''DELETE FROM {DB_NAME}.form_inputs WHERE form_id = "{form_id}";''')
+    conn.commit()
+    c.close()
+    return
 
 #新規ユーザを作成する
 def create_new_user(conn,uname:str,grade:str,mesc:str,displayname:str,passwd:str,email:str,discord:str,post:str):
@@ -116,6 +130,34 @@ def create_new_user(conn,uname:str,grade:str,mesc:str,displayname:str,passwd:str
         
     #テーブルに登録情報を記録
     sql = f'''INSERT IGNORE INTO {DB_NAME}.{TABLE_NAME} VALUES("{uname}","{grade}","{mesc}","{displayname}","{str(hashlib.sha256(passwd.encode('utf-8')).hexdigest())}","{email}","{discord}","{post}","NoToken","False");'''
+    c = conn.cursor()
+    c.execute(sql)
+    conn.commit()
+    c.close()
+    return 0
+
+#新規ユーザを作成する(登録フォームから。パスワードは元からハッシュ化されているという違いがある)
+def create_new_user_from_form(conn,uname:str,grade:str,mesc:str,displayname:str,passwd:str,email:str,discord:str,post:str):
+    c = conn.cursor()
+    #テーブルがなければ作成
+    c.execute(INIT_SQL_COMMAND)
+    c.close()
+    #役職名を設定
+    if post == '0':
+        post = 'なし'
+    elif post == '1':
+        post = '部長'
+    elif post == '2':
+        post = '副部長'
+    elif post == '3':
+        post = '会計'
+    elif post == '4':
+        post = '基幹システム班'
+    else:
+        post = 'その他の役職'
+        
+    #テーブルに登録情報を記録
+    sql = f'''INSERT IGNORE INTO {DB_NAME}.{TABLE_NAME} VALUES("{uname}","{grade}","{mesc}","{displayname}","{passwd}","{email}","{discord}","{post}","NoToken","False");'''
     c = conn.cursor()
     c.execute(sql)
     conn.commit()

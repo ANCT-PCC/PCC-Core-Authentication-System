@@ -13,6 +13,9 @@ VERSION = 'ver 1.1'
 
 #DB接続開始
 conn = dbc.startConnection()
+if conn is None:
+    print("[PCC-CAS] ERROR: DB Connection Failed.")
+    exit()
 #connauth = dbc.startAuthConnection()
 
 #初期化処理
@@ -65,7 +68,8 @@ def record_inputs():
     print(request.json)
     json_data = request.json[0]
     user_grade = json_data['grade']
-    user_class = json_data['class']
+    user_class = json_data['class'] 
+    user_number = json_data['number']
     firstname = json_data['firstname']
     lastname = json_data['lastname']
     passwd = hashlib.sha256(json_data['password'].encode("utf-8")).hexdigest()
@@ -74,9 +78,10 @@ def record_inputs():
     #これをもとにフォーム入力内容の確認と部員登録を行う。
     form_id = randomname(TOKEN_SIZE=TOKEN_SIZE)
     #DBに入力内容を一時的に登録
-    dbc.save_form_inputs(conn,form_id=form_id,user_grade=user_grade,user_class=user_class,firstname=firstname,lastname=lastname,passwd=passwd,discord=discord)
+    dbc.save_form_inputs(conn,form_id=form_id,user_grade=user_grade,user_class=user_class,user_number=user_number,firstname=firstname,lastname=lastname,passwd=passwd,discord=discord)
     #フォーム入力情報のIDを返す。
     data = [{'form_id':form_id}]
+    print(data)
     return json.dumps(data)
 
 @app.route('/submit/veryfi_inputs/<string:form_id>',methods=['GET'])
@@ -89,12 +94,61 @@ def veryfi_inputs(form_id:str):
     #取得した情報を、html内の各変数に設定してhtmlを返す。
     user_grade = res[0][1]
     user_class = res[0][2]
-    firstname = res[0][3]
-    lastname = res[0][4]
-    discord = res[0][6]
+    user_number = res[0][3]
+    firstname = res[0][4]
+    lastname = res[0][5]
+    discord = res[0][7]
     #パスワードは表示しない
-    return render_template('submit_veryfi.html',user_grade=user_grade,user_class=user_class,firstname=firstname,lastname=lastname,passwd='非表示',discord=discord)
+    return render_template('submit_veryfi.html',user_grade=user_grade,user_class=user_class,user_number=user_number,firstname=firstname,lastname=lastname,passwd='非表示',discord=discord)
 
+@app.route('/submit/setup/<string:form_id>',methods=['GET'])
+def submit_startup(form_id:str):
+    res = dbc.get_form_inputs(conn,form_id=form_id)
+    #form_idがDBに存在しない場合は、エラー画面を返す。
+    if len(res) == 0:
+        return render_template('error.html')
+    
+    #取得したフォーム内容を、pcc_usersテーブルに登録
+    user_grade = res[0][1]
+    user_class = res[0][2]
+    user_number = res[0][3]
+    firstname = res[0][4]
+    lastname = res[0][5]
+    passwd = res[0][6]
+    discord = res[0][7]
+    #ユーザ名を生成
+    current_year = datetime.datetime.now().year % 100
+
+    #学科名をアルファベットに変換
+    if user_class == 'M' or user_class == 'm' or user_class == '機械システム工学科':
+        user_class = 'M'
+    elif user_class == 'E' or user_class == 'e' or user_class == '電気情報工学科':
+        user_class = 'E'
+    elif user_class == 'S' or user_class == 's' or user_class == 'システム制御情報工学科':
+        user_class = 'S'
+    elif user_class == 'C' or user_class == 'c' or user_class == '物質化学工学科':
+        user_class = 'C'
+    elif user_class == 'A' or user_class == 'a' or user_class == '生産システム工学専攻':
+        user_class = 'A' #専攻
+    elif user_class == 'P' or user_class == 'p' or user_class == '応用化学専攻':
+        user_class = 'P' #専攻
+
+    class_number = None #学科番号
+    if user_class == 'M':
+        class_number = '11'
+    elif user_class == 'E':
+        class_number = '21'
+    elif user_class == 'S':
+        class_number = '31'
+    elif user_class == 'C':
+        class_number = '41'
+    
+    uname = str(user_class.lower()) + str(current_year) + str(class_number) + str(user_number)
+    email = uname + '@edu.asahikawa-nct.ac.jp'
+
+    #pcc_usersテーブルにユーザを登録
+    dbc.create_new_user_from_form(conn,uname=uname,grade=user_grade,mesc=user_class,displayname=firstname+' '+lastname,passwd=passwd,email=email,discord=discord,post='0')
+    return render_template('submit_complete.html',uname=uname)
 
 @app.route('/',methods=['GET'])
 def index():
@@ -124,6 +178,8 @@ def login():
         res = request.json[0]
         uname = res['uname']
         passwd = hashlib.sha256(res['passwd'].encode("utf-8")).hexdigest()
+        print(uname)
+        print(passwd)
         
         uinfo = dbc.search_userinfo_from_name(conn,uname)
         if len(uinfo) != 0:
