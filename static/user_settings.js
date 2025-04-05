@@ -9,6 +9,7 @@ const $currentPWD = document.getElementById('currentPWD');
 const $newDiscord = document.getElementById('newDiscord');
 const $changeDiscordSuccess = document.getElementById('changeDiscordSuccess');
 const $changeDiscord_button = document.getElementById('changeDiscord_button')
+const $leave_pcc = document.getElementById('leave_pcc');
 
 function init(){
   $changeFailed.style.visibility = 'hidden';
@@ -100,4 +101,8 @@ $changeDiscord_button.addEventListener('click',(e)=>{
       $newDiscord.value = '';
     })
   });
+
+$leave_pcc.addEventListener('click',(e)=>{
+  window.location.href = SERVER_ADDR+'leave_pcc';
+});
 init()

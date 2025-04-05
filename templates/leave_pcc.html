@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.118.2">
-    <title>ユーザ設定:{{uname}}/PCC-RENT</title>
+    <title>アカウントの退会:{{uname}}/PCC-RENT</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
     <link href="{{url_for('static',filename='pccrentlogo.css')}}" rel="stylesheet">
@@ -268,29 +268,30 @@
     </div>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-      <h2 class="mt-5">ユーザー設定: {{uname}}</h2>
-      <h5 class="mt-5">パスワードの変更</h5>
-      <input id="currentPWD" class="form-control" type="password" placeholder="現在のパスワード" aria-label="default input example">
-      <br>
-      <input id="newPWD" class="form-control" type="password" placeholder="新しいパスワード" aria-label="default input example">
-      <input id="newPWD_retype" class="form-control mt-1" type="password" placeholder="新しいパスワードの確認" aria-label="default input example">
-      <button id="changePWD_button" type="button" class="btn btn-secondary mt-1">パスワードを変更する</button>
-      <div id="changeSuccess" class="alert alert-success mt-1" role="alert">
-        A simple success alert—check it out!
+      <h2 class="mt-5">アカウントの退会: {{uname}}</h2>
+      <h5 class="mt-5">本当にアカウントを削除しますか？</h5>
+      <div id="login_status_error" class="alert alert-danger" role="alert">
+        <h2>！必ずお読みください！</h2>
+        アカウントが削除されると、以下の影響があります。<br>
+        ・旭川高専パソコン部での部員名簿から即時に削除されます。<br>
+        ・PCC-RENTでの備品の借用/返却ができなくなります。<br>
+        　※必ず、備品を返却後にアカウントを削除してください。<br>
+        ・その他、PCC-CASのアカウントを使用して利用したサービスが利用できなくなります。<br>
+        <br>
+        アカウントを削除すると、以下のデータが削除されます。<br>
+        ・学年、学科、氏名、メールアドレス、パスワード<br>
+        <br>
+        アカウントを削除しても、以下のデータは削除されません。<br>
+        ・PCC-RENTでの備品借用履歴(氏名も含む)<br>
+        ・その他、PCC-CASのアカウントを使用して利用したサービスの利用データ<br>
+        　（サービスの利用先で保存している場合は、削除されない場合があります。）<br>
       </div>
-      <div id="changeFailed" class="alert alert-danger" role="alert">
-        A simple danger alert—check it out!
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">パスワード</label>
+        <input type="password" class="form-control" id="passwd_for_leave_pcc" aria-describedby="emailHelp">
+        <div id="emailHelp" class="form-text">不明な場合はシステム管理者まで問い合わせてください。</div>
       </div>
-      <h5 class="mt-5">表示するDiscordユーザネームの変更</h5>
-      <input id="newDiscord" class="form-control mt-1" type="text" placeholder="新しいDiscordユーザ名" aria-label="default input example">
-      <button id="changeDiscord_button" type="button" class="btn btn-secondary mt-1">Discordユーザ名を変更する</button>
-      <div id="changeDiscordSuccess" class="alert alert-success mt-1" role="alert">
-        A simple success alert—check it out!
-      </div>
-      <br>
-      <h5 class="mt-5">退部</h5>
-      <p>どうか考え直して、、、</p>
-      <button id="leave_pcc" type="button" class="btn btn-danger mt-1">退部手続きへ進む</button>
+      <button id="leave_pcc" type="button" class="btn btn-danger">パソコン部を去る...</button>
 
     </main>
   </div>
@@ -299,6 +300,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js" integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="{{url_for('static',filename='user_settings.js')}}"></script>
+    <script src="{{url_for('static',filename='leave_pcc.js')}}"></script>
     
 </html>

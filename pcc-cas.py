@@ -9,7 +9,7 @@ import userSubmit
 
 TOKEN_SIZE = 64 #トークンのサイズ
 COOKIE_AGE = 0.5 #Cookieの有効期限(単位:h)
-VERSION = 'ver 1.1'
+VERSION = 'ver 1.2'
 
 #DB接続開始
 conn = dbc.startConnection()
@@ -158,6 +158,41 @@ def check_entry_keyword():
         return "OK",200
     else:
         return "NG",444
+    
+@app.route('/leave_pcc',methods=['GET','POST'])
+def leave_pcc():
+    if request.method == 'GET':
+        uname = request.cookies.get('uname')
+        token = request.cookies.get('token')
+        displayname = request.cookies.get('displayname')
+
+        uname,login_status = dbc.cktoken(conn,uname,token)
+        if login_status != 3:
+            return redirect('/login')
+        else:
+            return render_template('leave_pcc.html',uname=displayname,ver=VERSION)
+    elif request.method == 'POST':
+        uname = request.cookies.get('uname')
+        token = request.cookies.get('token')
+        displayname = request.cookies.get('displayname')
+
+        uname,login_status = dbc.cktoken(conn,uname,token)
+        if login_status != 3:
+            return redirect('/login')
+        else:
+            #パスワードの確認
+            currentPWD = hashlib.sha256(request.json[0]['password'].encode("utf-8")).hexdigest()
+            uinfo = dbc.search_userinfo_from_name(conn,uname)
+            if uinfo[0][4] != currentPWD:
+                return "incorrect password",401
+            #退部処理
+            dbc.delete_user(conn,uname)
+            res=make_response(redirect('/login'))
+            res.delete_cookie('token')
+            res.delete_cookie('uname')
+            res.delete_cookie('displayname')
+            return res,200
+
 
 @app.route('/',methods=['GET'])
 def index():
@@ -486,6 +521,11 @@ def keepalv():
 
     return json.dumps({'contents':res}),200
 
+#EULA
+@app.route('/eula')
+def eula():
+    return render_template('eula.html')
+
 #########################################
 
 # 他のシステムからのユーザ関係の情報照会
@@ -535,6 +575,8 @@ def getalluserinfo():
         return json.dumps(uinfo)
     else:
         return None
+    
+
 
 init(conn)
 print("Access: http://localhost:8080/")

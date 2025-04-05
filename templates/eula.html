@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.118.2">
-    <title>ユーザ設定:{{uname}}/PCC-RENT</title>
+    <title>情報の利用について/PCC-RENT</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
     <link href="{{url_for('static',filename='pccrentlogo.css')}}" rel="stylesheet">
@@ -268,30 +268,59 @@
     </div>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-      <h2 class="mt-5">ユーザー設定: {{uname}}</h2>
-      <h5 class="mt-5">パスワードの変更</h5>
-      <input id="currentPWD" class="form-control" type="password" placeholder="現在のパスワード" aria-label="default input example">
-      <br>
-      <input id="newPWD" class="form-control" type="password" placeholder="新しいパスワード" aria-label="default input example">
-      <input id="newPWD_retype" class="form-control mt-1" type="password" placeholder="新しいパスワードの確認" aria-label="default input example">
-      <button id="changePWD_button" type="button" class="btn btn-secondary mt-1">パスワードを変更する</button>
-      <div id="changeSuccess" class="alert alert-success mt-1" role="alert">
-        A simple success alert—check it out!
-      </div>
-      <div id="changeFailed" class="alert alert-danger" role="alert">
-        A simple danger alert—check it out!
-      </div>
-      <h5 class="mt-5">表示するDiscordユーザネームの変更</h5>
-      <input id="newDiscord" class="form-control mt-1" type="text" placeholder="新しいDiscordユーザ名" aria-label="default input example">
-      <button id="changeDiscord_button" type="button" class="btn btn-secondary mt-1">Discordユーザ名を変更する</button>
-      <div id="changeDiscordSuccess" class="alert alert-success mt-1" role="alert">
-        A simple success alert—check it out!
-      </div>
-      <br>
-      <h5 class="mt-5">退部</h5>
-      <p>どうか考え直して、、、</p>
-      <button id="leave_pcc" type="button" class="btn btn-danger mt-1">退部手続きへ進む</button>
+      <h2 class="mt-5">情報の利用について</h2>
+      <h5 class="mt-5">１、提供された情報の利用について</h5>
+      <div id="login_status_error" class="alert alert-primary" role="alert">
+        本システムの利用登録（入部）において、以下の内容について同意いただきます。<br>
+        ・システムの利用登録のためのフォームに記入された情報は、アカウントの作成がされる/されないに関わらず、<br>
+        　一時的にサーバに保存されます。<br>
+        　※定期的に、一時保存したデータは削除されます。<br>
+        ・アカウントが作成された場合は、フォームに記載された内容(上記の一時保存されたデータ)が<br>
+        　アカウント情報としてシステムに登録されます。<br>
+        ・PCC-CASに登録された情報は、PCC-CASのアカウントを用いた他のシステムにおいても利用されます。<br>
+        ・提供された情報は、旭川高専パソコン部の関係者であれば、メールアドレスとパスワードを除き、<br>
+        　他の部員に公開されます。<br>
+        ・アカウントが削除される場合は、PCC-CAS内で保存しているデータはすべて削除されますが、<br>
+        　他のシステムに登録された情報までは削除されません。（システムの利用履歴をログとして保存しているものなど）<br>
+        ・提供された情報は、旭川高専パソコン部の活動においてのみ利用されます。<br>
+        ・個人情報にあたる内容は、個人上保護法ガイドラインに基づき、適切に取り扱います。<br>
+        <br>
+        システム開発において、PCC-CASのデータを使用する場合は、以下の内容に同意いただきます。<br>
+        ・開発者は、事前にPCC-CASの管理者に許可を得てから、PCC-CASのデータを使用します。<br>
+        ・開発者および開発するシステムの管理担当は、個人情報の取り扱いについて十分に理解し、<br>
+        　個人情報が流出しないように、十分に注意してください。<br>
+        　（授業などで、セキュリティ関連の内容を真面目に聞いてください。）<br>
+        ・PCC-CASへのAPIを用いたデータアクセスにはトークンの発行が必要です。<br>
+        　※PCC-CAS管理者へ問い合わせてください。<br>
+        ・トークンの発行は、開発するシステム毎に発行します。<br>
+        ・発行されたトークンを別のシステムへ使用することはできません。<br>
+        　※同時使用が発覚した場合は、トークンを無効化の上、個人情報が流出していないか調査する場合があります。<br>
+        ・発行されたトークンは、開発者以外に絶対公開しないでください。<br>
+        　※GitHubなどの公開リポジトリにトークンを公開するなどした場合は、トークンを無効化の上、個人情報が流出していないか調査する場合があります。<br>
+        ・トークンが無効化された場合、新たにトークンを発行する必要があります。<br>
+        　※トークンの管理体制に問題などがあれば、PCC-CAS管理人の裁量でトークンの再発行をしない/無効化する場合があります。<br>
+        ・その他、開発においてPCC-CASのAPIの使用方法などは、PCC-CASの管理者へ問い合わせてください。<br>
+        <br>
+        PCC-CASに対する、情報開示について<br>
+        ・何らかの理由で、PCC-CASの情報を開示する必要がある場合は、PCC-CASの管理者へ問い合わせてください。<br>
+        ・システム管理者が必要と判断した場合に限り、情報を開示します。<br>
+        ・開示する情報は、システム管理者が必要と判断した情報のみです。<br>
+        ・開示された情報は、旭川高専パソコン部の関係者以外には絶対に公開しないでください。<br>
+        　※システム管理者の裁量で、開示される情報の公開範囲を別途指定する場合があります。<br>
+        ・開示された情報は、必要な範囲内でのみ利用してください。<br>
+        　なお、開示請求を行う際は、開示請求の理由や情報の用途をなるべく詳細に教えてください。<br>
+        　※開示された情報を無断で公開、開示請求の理由や用途と実際が異なることは、絶対にないようにお願いします。<br>
+        <br>
+        本システムにおける問い合わせについて<br>
+        ・本システムは、旭川高専パソコン部内のシステム管理者と<br>
+        　旭川高専パソコン部OBの齋藤が管理しています。<br>
+        ・本システムに関する問い合わせは、部長を通して以下のメールアドレスへお願いします。<br>
+        　system.anctpcc@gmail.com<br>
+        ・旭川高専パソコン部OBの齋藤への問い合わせは、以下のメールアドレスへお願いします。<br>
+        　n-saitou@mail.nemnet-lab.net<br>
 
+      </div>
+      
     </main>
   </div>
 </div>
