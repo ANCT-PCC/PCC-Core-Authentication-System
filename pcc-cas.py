@@ -1,4 +1,4 @@
-from flask import Flask, redirect,render_template,request,make_response,send_file
+from flask import Flask, redirect,render_template,request,make_response,send_file,Response
 from flask_httpauth import HTTPDigestAuth
 import dbc
 import random,string
@@ -72,7 +72,7 @@ def record_inputs():
     user_number = json_data['number']
     firstname = json_data['firstname']
     lastname = json_data['lastname']
-    passwd = hashlib.sha256(json_data['password'].encode("utf-8")).hexdigest()
+    passwd = json_data['password']
     discord = json_data['discord_id']
     #フォーム入力情報のIDを生成。
     #これをもとにフォーム入力内容の確認と部員登録を行う。
@@ -82,7 +82,7 @@ def record_inputs():
     #フォーム入力情報のIDを返す。
     data = [{'form_id':form_id}]
     print(data)
-    return json.dumps(data)
+    return Response(response=json.dumps(data), status=200, mimetype='application/json')
 
 @app.route('/submit/veryfi_inputs/<string:form_id>',methods=['GET'])
 def veryfi_inputs(form_id:str):
@@ -149,6 +149,15 @@ def submit_startup(form_id:str):
     #pcc_usersテーブルにユーザを登録
     dbc.create_new_user_from_form(conn,uname=uname,grade=user_grade,mesc=user_class,displayname=firstname+' '+lastname,passwd=passwd,email=email,discord=discord,post='0')
     return render_template('submit_complete.html',uname=uname)
+
+@app.route('/submit/entry_keyword',methods=['POST'])
+def check_entry_keyword():
+    #入部のあいことば
+    entry_keyword = 'ふぉれすとりばあ'
+    if (entry_keyword == request.json[0]['entry_keyword']):
+        return "OK",200
+    else:
+        return "NG",444
 
 @app.route('/',methods=['GET'])
 def index():

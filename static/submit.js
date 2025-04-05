@@ -45,22 +45,21 @@ $button_next.addEventListener('click',(e) => {
           type:'POST',
           data:JSON.stringify(form_data), //ここで辞書型からJSONに変換
           dataType: 'json',
-          contentType: 'application/json'
-    }).always(function (jqXHR,json) {
-        console.log("statuscode::")
-        console.log(jqXHR.status);
-        if(String(jqXHR.status) === "200"){
-            //サーバへの入力データの一時キャッシュ成功
-            //内容確認画面へ遷移
-            var data = JSON.stringify(json);
-            var form_id = JSON.parse(data)[0]['form_id'];
-            window.location.href = 'https://test-cas.nemnet-lab.net/'+'submit/veryfi_inputs'+form_id;
-        }else{
-            //サーバサイドエラー
-            console.log("サーバサイドエラー")
-            console.log(jqXHR.status);
-          $error_message.textContent = "不明なエラー。システム管理者へ問い合わせてください";
-          $error_message.style.visibility = "visible";
+          contentType: 'application/json',
+          success: function (response, textStatus, jqXHR) {
+            console.log("statuscode::", jqXHR.status); // ステータスコードを確認
+            if (jqXHR.status === 200) {
+                // サーバへの入力データの一時キャッシュ成功
+                // 内容確認画面へ遷移
+                var form_id = response[0]['form_id'];
+                window.location.href = 'https://test-cas.nemnet-lab.net/submit/veryfi_inputs/' + form_id;
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log("サーバサイドエラー");
+            console.log("statuscode::", jqXHR.status); // ステータスコードを確認
+            $error_message.textContent = "不明なエラー。システム管理者へ問い合わせてください";
+            $error_message.style.visibility = "visible";
         }
     })};
 
