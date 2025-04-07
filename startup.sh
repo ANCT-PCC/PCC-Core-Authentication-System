@@ -13,5 +13,6 @@ sed -i -e s#$PREV_ADDR#$SERVER_ADDR#g static/passwd_change.js
 sed -i -e s#$PREV_ADDR#$SERVER_ADDR#g static/user_settings.js
 sed -i -e s#$PREV_ADDR#$SERVER_ADDR#g static/submit.js
 sed -i -e s#$PREV_ADDR#$SERVER_ADDR#g static/submit_inputs.js
+sed -i -e s#$PREV_ADDR#$SERVER_ADDR#g static/leave_pcc.js
 
 python pcc-cas.py
