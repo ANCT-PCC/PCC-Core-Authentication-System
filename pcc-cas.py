@@ -32,6 +32,8 @@ def init(conn):
     conn.commit()
     c.execute(dbc.INIT_SQL_COMMAND_4)
     conn.commit()
+    c.execute(dbc.INIT_SQL_COMMAND_5)
+    conn.commit()
     c.close()
     res = dbc.sqlExecute(conn,command)
     print(f"\nアクセストークン初期化を実行\n")
@@ -186,6 +188,7 @@ def leave_pcc():
             if uinfo[0][4] != currentPWD:
                 return "incorrect password",401
             #退部処理
+
             dbc.delete_user(conn,uname)
             res=make_response(redirect('/login'))
             res.delete_cookie('token')

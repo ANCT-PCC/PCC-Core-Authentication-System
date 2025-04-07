@@ -1,6 +1,7 @@
 import hashlib
 import mysql.connector
 import string,random
+import datetime
 
 DB_SERVER = 'pcc-cas-db'
 #DB_SERVER='127.0.0.1'
@@ -40,6 +41,16 @@ INIT_SQL_COMMAND_4 = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.form_inputs (
     lastname TEXT,
     password TEXT,
     discord TEXT
+    ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'''
+INIT_SQL_COMMAND_5 = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.deleted_users (
+    uname VARCHAR(255) NOT NULL PRIMARY KEY,
+    grade TEXT,
+    mesc TEXT,
+    displayname TEXT,
+    deleted_at TEXT,
+    email TEXT,
+    discord TEXT,
+    post TEXT
     ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'''
 
 #MySQL接続
@@ -167,6 +178,12 @@ def create_new_user_from_form(conn,uname:str,grade:str,mesc:str,displayname:str,
 #ユーザーを削除
 def delete_user(conn,uname:str):
     c = conn.cursor()
+    #削除履歴に追加
+    res = search_userinfo_from_name(conn,uname)
+    now_time = datetime.datetime.now().strftime('%Y年%m月%d日 %H:%M')
+    sql = f'''INSERT IGNORE INTO {DB_NAME}.deleted_users VALUES("{uname}","{res[0][1]}","{res[0][2]}","{res[0][3]}","{now_time}","{res[0][5]}","{res[0][6]}","{res[0][7]}");'''
+    c.execute(sql)
+    conn.commit()
     #ユーザー削除
     c.execute(f'''DELETE FROM {TABLE_NAME} WHERE uname = "{uname}";''')
     conn.commit()

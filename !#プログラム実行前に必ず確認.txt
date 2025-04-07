@@ -1,6 +1,7 @@
 dbc.pyのDB_PASSWDを変更したか？
 docker-compose.ymlのデータベースのパスワードを変更したか？
 setting_files/admin_info.jsonの管理者パスワードは変更したか？
+startup.shのアドレスは変更前と変更後も含めてすべて正しいか？
 
 Pythonに関しては、変更必要箇所は、「#」で囲っているので、そこを確認！！
 admin_info.jsonは、「"ここを変更"」の場所にパスワードを入れる
