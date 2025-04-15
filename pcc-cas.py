@@ -9,7 +9,7 @@ import userSubmit
 
 TOKEN_SIZE = 64 #トークンのサイズ
 COOKIE_AGE = 0.5 #Cookieの有効期限(単位:h)
-VERSION = 'ver 1.2'
+VERSION = 'ver 1.3.1'
 
 #DB接続開始
 conn = dbc.startConnection()
