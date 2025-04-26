@@ -389,16 +389,123 @@ def show_members():
     else:
         res = dbc.get_all_users(conn)
         member_info = []
+        grade_1 = []
+        grade_2 = []
+        grade_3 = []
+        grade_4 = []
+        grade_5 = []
+        mecanical = {}
+        electnical = {}
+        system = {}
+        chemical = {}
+        print("===================")
+        print(res)
+        print("====================")
+        for flag in range(len(res)): #部員の数だけループ
+            print(f'{flag}番目の部員')
+            if res[flag][10] == '11':
+                mecanical['displayname']=str(res[flag][3])
+                mecanical['uname']=str(res[flag][0])
+                mecanical['grade']=str(res[flag][1])
+                mecanical['class']=str(res[flag][2])
+                mecanical['discord']=str(res[flag][6])
+                mecanical['post'] = str(res[flag][7])
+                #mecanical['class_number'] = str(res[flag][10])
+                if res[flag][1] == "1":
+                    grade_1.append(mecanical)
+                    print("M,grade_1に追加")
+                elif res[flag][1] == "2":
+                    grade_2.append(mecanical)
+                    print("M,grade_2に追加")
+                elif res[flag][1] == "3":
+                    grade_3.append(mecanical)
+                    print("M,grade_3に追加")
+                elif res[flag][1] == "4":
+                    grade_4.append(mecanical)
+                    print("M,grade_4に追加")
+                elif res[flag][1] == "5":
+                    grade_5.append(mecanical)
+                    print("M,grade_5に追加")
 
-        for flag in range(len(res)):
-            dict = {}
-            dict['displayname']=str(res[flag][3])
-            dict['uname']=str(res[flag][0])
-            dict['grade']=str(res[flag][1])
-            dict['class']=str(res[flag][2])
-            dict['discord']=str(res[flag][6])
-            dict['post'] = str(res[flag][7])
-            member_info.append(dict)
+            elif res[flag][10] == '21':
+                electnical['displayname']=str(res[flag][3])
+                electnical['uname']=str(res[flag][0])
+                electnical['grade']=str(res[flag][1])
+                electnical['class']=str(res[flag][2])
+                electnical['discord']=str(res[flag][6])
+                electnical['post'] = str(res[flag][7])
+                #electnical['class_number'] = str(res[flag][10])
+                if res[flag][1] == "1":
+                    grade_1.append(electnical)
+                    print("E,grade_1に追加")
+                elif res[flag][1] == "2":
+                    grade_2.append(electnical)
+                    print("E,grade_2に追加")
+                elif res[flag][1] == "3":
+                    grade_3.append(electnical)
+                    print("E,grade_3に追加")
+                elif res[flag][1] == "4":
+                    grade_4.append(electnical)
+                    print("E,grade_4に追加")
+                elif res[flag][1] == "5":
+                    grade_5.append(electnical)
+                    print("E,grade_5に追加")
+
+            elif res[flag][10] == '31':
+                system['displayname']=str(res[flag][3])
+                system['uname']=str(res[flag][0])
+                system['grade']=str(res[flag][1])
+                system['class']=str(res[flag][2])
+                system['discord']=str(res[flag][6])
+                system['post'] = str(res[flag][7])
+                #system['class_number'] = str(res[flag][10])
+                if res[flag][1] == "1":
+                    grade_1.append(system)
+                    print("S,grade_1に追加")
+                elif res[flag][1] == "2":
+                    grade_2.append(system)
+                    print("S,grade_2に追加")
+                elif res[flag][1] == "3":
+                    grade_3.append(system)
+                    print("S,grade_3に追加")
+                elif res[flag][1] == "4":
+                    grade_4.append(system)
+                    print("S,grade_4に追加")
+                elif res[flag][1] == "5":
+                    grade_5.append(system)
+                    print("S,grade_5に追加")
+
+            elif res[flag][10] == '41':
+                chemical['displayname']=str(res[flag][3])
+                chemical['uname']=str(res[flag][0])
+                chemical['grade']=str(res[flag][1])
+                chemical['class']=str(res[flag][2])
+                chemical['discord']=str(res[flag][6])
+                chemical['post'] = str(res[flag][7])
+                #chemical['class_number'] = str(res[flag][10])
+                if res[flag][1] == "1":
+                    grade_1.append(chemical)
+                    print("C,grade_1に追加")
+                elif res[flag][1] == "2":
+                    grade_2.append(chemical)
+                    print("C,grade_2に追加")
+                elif res[flag][1] == "3":
+                    grade_3.append(chemical)
+                    print("C,grade_3に追加")
+                elif res[flag][1] == "4":
+                    grade_4.append(chemical)
+                    print("C,grade_4に追加")
+                elif res[flag][1] == "5":
+                    grade_5.append(chemical)
+                    print("C,grade_5に追加")
+
+        member_info.extend([grade_1, grade_2, grade_3, grade_4, grade_5])
+        print(f"1年生: {grade_1}")
+        print(f"2年生: {grade_2}")
+        print(f"3年生: {grade_3}")
+        print(f"4年生: {grade_4}")
+        print(f"5年生: {grade_5}")
+        print("member_info= "+str(member_info))
 
         return json.dumps(member_info)
         

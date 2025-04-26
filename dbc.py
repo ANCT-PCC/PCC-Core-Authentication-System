@@ -22,7 +22,8 @@ INIT_SQL_COMMAND = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.{TABLE_NAME} (
     discord TEXT,
     post TEXT,
     setting_token TEXT,
-    changedpwd TEXT
+    changedpwd TEXT,
+    class_number TEXT
     ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;'''
 INIT_SQL_COMMAND_2 = f'''CREATE TABLE IF NOT EXISTS {DB_NAME}.pcc_systems_token (
     system_name VARCHAR(255) NOT NULL PRIMARY KEY,
@@ -138,9 +139,20 @@ def create_new_user(conn,uname:str,grade:str,mesc:str,displayname:str,passwd:str
         post = '基幹システム班'
     else:
         post = 'その他の役職'
-        
+
+    #ユーザのクラス番号を判別
+    class_number = ''
+    if mesc == 'M' or mesc == 'm':
+        class_number = '11'
+    elif mesc == 'E' or mesc == 'e':
+        class_number = '21'
+    elif mesc == 'S' or mesc == 's':
+        class_number = '31'
+    elif mesc == 'C' or mesc == 'c':
+        class_number = '41'
+
     #テーブルに登録情報を記録
-    sql = f'''INSERT IGNORE INTO {DB_NAME}.{TABLE_NAME} VALUES("{uname}","{grade}","{mesc}","{displayname}","{str(hashlib.sha256(passwd.encode('utf-8')).hexdigest())}","{email}","{discord}","{post}","NoToken","False");'''
+    sql = f'''INSERT IGNORE INTO {DB_NAME}.{TABLE_NAME} VALUES("{uname}","{grade}","{mesc}","{displayname}","{str(hashlib.sha256(passwd.encode('utf-8')).hexdigest())}","{email}","{discord}","{post}","NoToken","False","{class_number}");'''
     c = conn.cursor()
     c.execute(sql)
     conn.commit()
@@ -166,9 +178,20 @@ def create_new_user_from_form(conn,uname:str,grade:str,mesc:str,displayname:str,
         post = '基幹システム班'
     else:
         post = 'その他の役職'
+
+    #ユーザのクラス番号を判別
+    class_number = ''
+    if mesc == 'M' or mesc == 'm':
+        class_number = '11'
+    elif mesc == 'E' or mesc == 'e':
+        class_number = '21'
+    elif mesc == 'S' or mesc == 's':
+        class_number = '31'
+    elif mesc == 'C' or mesc == 'c':
+        class_number = '41'
         
     #テーブルに登録情報を記録
-    sql = f'''INSERT IGNORE INTO {DB_NAME}.{TABLE_NAME} VALUES("{uname}","{grade}","{mesc}","{displayname}","{passwd}","{email}","{discord}","{post}","NoToken","True");'''
+    sql = f'''INSERT IGNORE INTO {DB_NAME}.{TABLE_NAME} VALUES("{uname}","{grade}","{mesc}","{displayname}","{passwd}","{email}","{discord}","{post}","NoToken","True","{class_number}");'''
     c = conn.cursor()
     c.execute(sql)
     conn.commit()
