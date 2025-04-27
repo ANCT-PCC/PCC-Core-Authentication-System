@@ -9,7 +9,22 @@ import userSubmit
 
 TOKEN_SIZE = 64 #トークンのサイズ
 COOKIE_AGE = 0.5 #Cookieの有効期限(単位:h)
-VERSION = 'ver 1.3.1'
+VERSION = 'ver 1.3.2' #バージョン情報
+
+class Worker:
+    def __init__(self):
+        self.name = None
+        self.class_name = None
+        self.disc = None
+
+class Member:
+    def __init__(self):
+        self.grade5 = None
+        self.grade4 = None
+        self.grade3 = None
+        self.grade2 = None
+        self.grade1 = None
+        self.all = None
 
 #DB接続開始
 conn = dbc.startConnection()
@@ -67,7 +82,6 @@ def submit():
 @app.route('/submit/veryfi_inputs',methods=['POST'])
 def record_inputs():
     #フォーム入力内容の取得
-    print(request.json)
     json_data = request.json[0]
     user_grade = json_data['grade']
     user_class = json_data['class'] 
@@ -83,7 +97,6 @@ def record_inputs():
     dbc.save_form_inputs(conn,form_id=form_id,user_grade=user_grade,user_class=user_class,user_number=user_number,firstname=firstname,lastname=lastname,passwd=passwd,discord=discord)
     #フォーム入力情報のIDを返す。
     data = [{'form_id':form_id}]
-    print(data)
     return Response(response=json.dumps(data), status=200, mimetype='application/json')
 
 @app.route('/submit/veryfi_inputs/<string:form_id>',methods=['GET'])
@@ -225,8 +238,6 @@ def login():
         res = request.json[0]
         uname = res['uname']
         passwd = hashlib.sha256(res['passwd'].encode("utf-8")).hexdigest()
-        print(uname)
-        print(passwd)
         
         uinfo = dbc.search_userinfo_from_name(conn,uname)
         if len(uinfo) != 0:
@@ -388,126 +399,310 @@ def show_members():
         return redirect('/login')
     else:
         res = dbc.get_all_users(conn)
-        member_info = []
-        grade_1 = []
-        grade_2 = []
-        grade_3 = []
-        grade_4 = []
-        grade_5 = []
+        member_info = [] #json生成用
+        users = [[[] for _ in range(4)] for _ in range(5)]
         mecanical = {}
         electnical = {}
         system = {}
         chemical = {}
-        print("===================")
-        print(res)
-        print("====================")
+        
         for flag in range(len(res)): #部員の数だけループ
-            print(f'{flag}番目の部員')
-            if res[flag][10] == '11':
-                mecanical['displayname']=str(res[flag][3])
-                mecanical['uname']=str(res[flag][0])
-                mecanical['grade']=str(res[flag][1])
-                mecanical['class']=str(res[flag][2])
-                mecanical['discord']=str(res[flag][6])
-                mecanical['post'] = str(res[flag][7])
-                #mecanical['class_number'] = str(res[flag][10])
-                if res[flag][1] == "1":
-                    grade_1.append(mecanical)
-                    print("M,grade_1に追加")
-                elif res[flag][1] == "2":
-                    grade_2.append(mecanical)
-                    print("M,grade_2に追加")
-                elif res[flag][1] == "3":
-                    grade_3.append(mecanical)
-                    print("M,grade_3に追加")
-                elif res[flag][1] == "4":
-                    grade_4.append(mecanical)
-                    print("M,grade_4に追加")
-                elif res[flag][1] == "5":
-                    grade_5.append(mecanical)
-                    print("M,grade_5に追加")
+            mecanical = {}
+            electnical = {}
+            system = {}
+            chemical = {}
+            
+            if res[flag][1] == '1' :
+                if res[flag][10] == '11':
+                    mecanical['displayname']=str(res[flag][3])
+                    mecanical['uname']=str(res[flag][0])
+                    mecanical['grade']=str(res[flag][1])
+                    mecanical['class']=str(res[flag][2])
+                    mecanical['discord']=str(res[flag][6])
+                    mecanical['post'] = str(res[flag][7])
 
-            elif res[flag][10] == '21':
-                electnical['displayname']=str(res[flag][3])
-                electnical['uname']=str(res[flag][0])
-                electnical['grade']=str(res[flag][1])
-                electnical['class']=str(res[flag][2])
-                electnical['discord']=str(res[flag][6])
-                electnical['post'] = str(res[flag][7])
-                #electnical['class_number'] = str(res[flag][10])
-                if res[flag][1] == "1":
-                    grade_1.append(electnical)
-                    print("E,grade_1に追加")
-                elif res[flag][1] == "2":
-                    grade_2.append(electnical)
-                    print("E,grade_2に追加")
-                elif res[flag][1] == "3":
-                    grade_3.append(electnical)
-                    print("E,grade_3に追加")
-                elif res[flag][1] == "4":
-                    grade_4.append(electnical)
-                    print("E,grade_4に追加")
-                elif res[flag][1] == "5":
-                    grade_5.append(electnical)
-                    print("E,grade_5に追加")
+                    users[0][0].append(mecanical)
+                
 
-            elif res[flag][10] == '31':
-                system['displayname']=str(res[flag][3])
-                system['uname']=str(res[flag][0])
-                system['grade']=str(res[flag][1])
-                system['class']=str(res[flag][2])
-                system['discord']=str(res[flag][6])
-                system['post'] = str(res[flag][7])
-                #system['class_number'] = str(res[flag][10])
-                if res[flag][1] == "1":
-                    grade_1.append(system)
-                    print("S,grade_1に追加")
-                elif res[flag][1] == "2":
-                    grade_2.append(system)
-                    print("S,grade_2に追加")
-                elif res[flag][1] == "3":
-                    grade_3.append(system)
-                    print("S,grade_3に追加")
-                elif res[flag][1] == "4":
-                    grade_4.append(system)
-                    print("S,grade_4に追加")
-                elif res[flag][1] == "5":
-                    grade_5.append(system)
-                    print("S,grade_5に追加")
+                elif res[flag][10] == '21':
+                    electnical['displayname']=str(res[flag][3])
+                    electnical['uname']=str(res[flag][0])
+                    electnical['grade']=str(res[flag][1])
+                    electnical['class']=str(res[flag][2])
+                    electnical['discord']=str(res[flag][6])
+                    electnical['post'] = str(res[flag][7])
 
-            elif res[flag][10] == '41':
-                chemical['displayname']=str(res[flag][3])
-                chemical['uname']=str(res[flag][0])
-                chemical['grade']=str(res[flag][1])
-                chemical['class']=str(res[flag][2])
-                chemical['discord']=str(res[flag][6])
-                chemical['post'] = str(res[flag][7])
-                #chemical['class_number'] = str(res[flag][10])
-                if res[flag][1] == "1":
-                    grade_1.append(chemical)
-                    print("C,grade_1に追加")
-                elif res[flag][1] == "2":
-                    grade_2.append(chemical)
-                    print("C,grade_2に追加")
-                elif res[flag][1] == "3":
-                    grade_3.append(chemical)
-                    print("C,grade_3に追加")
-                elif res[flag][1] == "4":
-                    grade_4.append(chemical)
-                    print("C,grade_4に追加")
-                elif res[flag][1] == "5":
-                    grade_5.append(chemical)
-                    print("C,grade_5に追加")
+                    users[0][1].append(electnical)
 
-        member_info.extend([grade_1, grade_2, grade_3, grade_4, grade_5])
-        print(f"1年生: {grade_1}")
-        print(f"2年生: {grade_2}")
-        print(f"3年生: {grade_3}")
-        print(f"4年生: {grade_4}")
-        print(f"5年生: {grade_5}")
-        print("member_info= "+str(member_info))
+                elif res[flag][10] == '31':
+                    system['displayname']=str(res[flag][3])
+                    system['uname']=str(res[flag][0])
+                    system['grade']=str(res[flag][1])
+                    system['class']=str(res[flag][2])
+                    system['discord']=str(res[flag][6])
+                    system['post'] = str(res[flag][7])
+                    
+                    users[0][2].append(system)
+
+                elif res[flag][10] == '41':
+                    chemical['displayname']=str(res[flag][3])
+                    chemical['uname']=str(res[flag][0])
+                    chemical['grade']=str(res[flag][1])
+                    chemical['class']=str(res[flag][2])
+                    chemical['discord']=str(res[flag][6])
+                    chemical['post'] = str(res[flag][7])
+                
+                    users[0][3].append(chemical)
+
+            elif res[flag][1] == '2' :
+                if res[flag][10] == '11':
+                    mecanical['displayname']=str(res[flag][3])
+                    mecanical['uname']=str(res[flag][0])
+                    mecanical['grade']=str(res[flag][1])
+                    mecanical['class']=str(res[flag][2])
+                    mecanical['discord']=str(res[flag][6])
+                    mecanical['post'] = str(res[flag][7])
+
+                    users[1][0].append(mecanical)
+                
+
+                elif res[flag][10] == '21':
+                    electnical['displayname']=str(res[flag][3])
+                    electnical['uname']=str(res[flag][0])
+                    electnical['grade']=str(res[flag][1])
+                    electnical['class']=str(res[flag][2])
+                    electnical['discord']=str(res[flag][6])
+                    electnical['post'] = str(res[flag][7])
+
+                    users[1][1].append(electnical)
+
+                elif res[flag][10] == '31':
+                    system['displayname']=str(res[flag][3])
+                    system['uname']=str(res[flag][0])
+                    system['grade']=str(res[flag][1])
+                    system['class']=str(res[flag][2])
+                    system['discord']=str(res[flag][6])
+                    system['post'] = str(res[flag][7])
+                    
+                    users[1][2].append(system)
+
+                elif res[flag][10] == '41':
+                    chemical['displayname']=str(res[flag][3])
+                    chemical['uname']=str(res[flag][0])
+                    chemical['grade']=str(res[flag][1])
+                    chemical['class']=str(res[flag][2])
+                    chemical['discord']=str(res[flag][6])
+                    chemical['post'] = str(res[flag][7])
+                
+                    users[1][3].append(chemical)
+
+            elif res[flag][1] == '3' :
+                if res[flag][10] == '11':
+                    mecanical['displayname']=str(res[flag][3])
+                    mecanical['uname']=str(res[flag][0])
+                    mecanical['grade']=str(res[flag][1])
+                    mecanical['class']=str(res[flag][2])
+                    mecanical['discord']=str(res[flag][6])
+                    mecanical['post'] = str(res[flag][7])
+
+                    users[2][0].append(mecanical)
+                
+
+                elif res[flag][10] == '21':
+                    electnical['displayname']=str(res[flag][3])
+                    electnical['uname']=str(res[flag][0])
+                    electnical['grade']=str(res[flag][1])
+                    electnical['class']=str(res[flag][2])
+                    electnical['discord']=str(res[flag][6])
+                    electnical['post'] = str(res[flag][7])
+
+                    users[2][1].append(electnical)
+
+                elif res[flag][10] == '31':
+                    system['displayname']=str(res[flag][3])
+                    system['uname']=str(res[flag][0])
+                    system['grade']=str(res[flag][1])
+                    system['class']=str(res[flag][2])
+                    system['discord']=str(res[flag][6])
+                    system['post'] = str(res[flag][7])
+                    
+                    users[2][2].append(system)
+
+                elif res[flag][10] == '41':
+                    chemical['displayname']=str(res[flag][3])
+                    chemical['uname']=str(res[flag][0])
+                    chemical['grade']=str(res[flag][1])
+                    chemical['class']=str(res[flag][2])
+                    chemical['discord']=str(res[flag][6])
+                    chemical['post'] = str(res[flag][7])
+                
+                    users[2][3].append(chemical)
+
+            if res[flag][1] == '4' :
+                if res[flag][10] == '11':
+                    mecanical['displayname']=str(res[flag][3])
+                    mecanical['uname']=str(res[flag][0])
+                    mecanical['grade']=str(res[flag][1])
+                    mecanical['class']=str(res[flag][2])
+                    mecanical['discord']=str(res[flag][6])
+                    mecanical['post'] = str(res[flag][7])
+
+                    users[3][0].append(mecanical)
+                
+
+                elif res[flag][10] == '21':
+                    electnical['displayname']=str(res[flag][3])
+                    electnical['uname']=str(res[flag][0])
+                    electnical['grade']=str(res[flag][1])
+                    electnical['class']=str(res[flag][2])
+                    electnical['discord']=str(res[flag][6])
+                    electnical['post'] = str(res[flag][7])
+
+                    users[3][1].append(electnical)
+
+                elif res[flag][10] == '31':
+                    system['displayname']=str(res[flag][3])
+                    system['uname']=str(res[flag][0])
+                    system['grade']=str(res[flag][1])
+                    system['class']=str(res[flag][2])
+                    system['discord']=str(res[flag][6])
+                    system['post'] = str(res[flag][7])
+                    
+                    users[3][2].append(system)
+
+                elif res[flag][10] == '41':
+                    chemical['displayname']=str(res[flag][3])
+                    chemical['uname']=str(res[flag][0])
+                    chemical['grade']=str(res[flag][1])
+                    chemical['class']=str(res[flag][2])
+                    chemical['discord']=str(res[flag][6])
+                    chemical['post'] = str(res[flag][7])
+                
+                    users[3][3].append(chemical)
+            
+            if res[flag][1] == '5' :
+                if res[flag][10] == '11':
+                    mecanical['displayname']=str(res[flag][3])
+                    mecanical['uname']=str(res[flag][0])
+                    mecanical['grade']=str(res[flag][1])
+                    mecanical['class']=str(res[flag][2])
+                    mecanical['discord']=str(res[flag][6])
+                    mecanical['post'] = str(res[flag][7])
+
+                    users[4][0].append(mecanical)
+                
+
+                elif res[flag][10] == '21':
+                    electnical['displayname']=str(res[flag][3])
+                    electnical['uname']=str(res[flag][0])
+                    electnical['grade']=str(res[flag][1])
+                    electnical['class']=str(res[flag][2])
+                    electnical['discord']=str(res[flag][6])
+                    electnical['post'] = str(res[flag][7])
+
+                    users[4][1].append(electnical)
+
+                elif res[flag][10] == '31':
+                    system['displayname']=str(res[flag][3])
+                    system['uname']=str(res[flag][0])
+                    system['grade']=str(res[flag][1])
+                    system['class']=str(res[flag][2])
+                    system['discord']=str(res[flag][6])
+                    system['post'] = str(res[flag][7])
+                    
+                    users[4][2].append(system)
+
+                elif res[flag][10] == '41':
+                    chemical['displayname']=str(res[flag][3])
+                    chemical['uname']=str(res[flag][0])
+                    chemical['grade']=str(res[flag][1])
+                    chemical['class']=str(res[flag][2])
+                    chemical['discord']=str(res[flag][6])
+                    chemical['post'] = str(res[flag][7])
+                
+                    users[4][3].append(chemical)
+
+        #5年生から順に、MESCの順番で部員を整理してmember_infoに追加する
+        grade = 5
+        mesc = 0
+        while grade > 0:
+            grade -= 1
+            mesc = 0
+            while mesc < 4:
+                for item in users[grade][mesc]:
+                    if users[grade][mesc] != None:
+                        member_info.append(item)
+                mesc += 1
 
         return json.dumps(member_info)
+    
+@app.route('/info')
+def show_info():
+    uname = request.cookies.get('uname')
+    token = request.cookies.get('token')
+
+    uname,login_status = dbc.cktoken(conn,uname,token)
+    if login_status != 3:
+        return redirect('/login')
+    else:
+        workers , members = dbc.get_club_information(conn)
+
+        club_leader = Worker()
+        club_leader.name = workers[0][0][0]
+        club_leader.class_name = workers[0][0][1]+workers[0][0][2]
+        club_leader.disc = ''
+
+        club_subleader = Worker()
+
+        for flag in range(len(workers[1])):
+            if flag == 0:
+                club_subleader.name = workers[1][flag][0]
+            else:
+                club_subleader.name = club_subleader.name + ','+workers[1][flag][0]
+
+        for flag in range(len(workers[1])):
+            if flag == 0:
+                club_subleader.class_name = workers[1][flag][1]+workers[1][flag][2]
+            else:
+                club_subleader.class_name = club_subleader.class_name + ','+workers[1][flag][1]+workers[1][flag][2]
+        club_subleader.disc = ''
+
+        casher = Worker()
+        for flag in range(len(workers[2])):
+            if flag == 0:
+                casher.name = workers[2][flag][0]
+            else:
+                casher.name = casher.name + ','+workers[2][flag][0]
+
+        for flag in range(len(workers[2])):
+            if flag == 0:
+                casher.class_name = workers[2][flag][1]+workers[2][flag][2]
+            else:
+                casher.class_name = casher.name + ','+workers[2][flag][1]+workers[2][flag][2]
+        casher.disc = ''
+        
+        admin = Worker()
+        for flag in range(len(workers[3])):
+            if flag == 0:
+                admin.name = workers[3][flag][0]
+            else:
+                admin.name = admin.name + ','+workers[3][flag][0]
+
+        for flag in range(len(workers[3])):
+            if flag == 0:
+                admin.class_name = workers[3][flag][1]+workers[3][flag][2]
+            else:
+                admin.class_name = admin.name + ','+workers[3][flag][1]+workers[3][flag][2]
+        admin.disc = ''
+
+        members_count = Member()
+        members_count.grade5 = members[0]
+        members_count.grade4 = members[1]
+        members_count.grade3 = members[2]
+        members_count.grade2 = members[3]
+        members_count.grade1 = members[4]
+        members_count.all = int(members_count.grade5)+int(members_count.grade4)+int(members_count.grade3)+int(members_count.grade2)+int(members_count.grade1)
+        return render_template('info.html',ver=VERSION,members=members_count,club_leader=club_leader,club_subleader=club_subleader,casher=casher,admin=admin)
         
 @app.route('/admintools')
 @auth.login_required
@@ -646,7 +841,6 @@ def eula():
 def getuserinfo():
     uname = request.json['username']
     system_token = request.json['system_token']
-    print(system_token)
     tokenFlag = dbc.ckSystemToken(conn,system_token=system_token)
     if tokenFlag == True:
         res = dbc.search_userinfo_from_name(conn=conn,uname=uname)
@@ -655,7 +849,6 @@ def getuserinfo():
         
         uinfo = []
         for i in range(10):
-            print(i)
             if i == 4 or i == 8:
                 continue
             uinfo.append(res[0][i])

@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.118.2">
-    <title>ユーザ設定:{{uname}}/PCC-RENT</title>
+    <title>情報一覧/PCC-RENT</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
     <link href="{{url_for('static',filename='pccrentlogo.css')}}" rel="stylesheet">
@@ -268,29 +268,94 @@
     </div>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-      <h2 class="mt-5">ユーザー設定: {{uname}}</h2>
-      <h5 class="mt-5">パスワードの変更</h5>
-      <input id="currentPWD" class="form-control" type="password" placeholder="現在のパスワード" aria-label="default input example">
-      <br>
-      <input id="newPWD" class="form-control" type="password" placeholder="新しいパスワード" aria-label="default input example">
-      <input id="newPWD_retype" class="form-control mt-1" type="password" placeholder="新しいパスワードの確認" aria-label="default input example">
-      <button id="changePWD_button" type="button" class="btn btn-secondary mt-1">パスワードを変更する</button>
-      <div id="changeSuccess" class="alert alert-success mt-1" role="alert">
-        A simple success alert—check it out!
-      </div>
-      <div id="changeFailed" class="alert alert-danger" role="alert">
-        A simple danger alert—check it out!
-      </div>
-      <h5 class="mt-5">表示するDiscordユーザネームの変更</h5>
-      <input id="newDiscord" class="form-control mt-1" type="text" placeholder="新しいDiscordユーザ名" aria-label="default input example">
-      <button id="changeDiscord_button" type="button" class="btn btn-secondary mt-1">Discordユーザ名を変更する</button>
-      <div id="changeDiscordSuccess" class="alert alert-success mt-1" role="alert">
-        A simple success alert—check it out!
-      </div>
-      <br>
-      <h5 class="mt-5">退部</h5>
-      <p>どうか考え直して、、、</p>
-      <button id="leave_pcc" type="button" class="btn btn-danger mt-1">退部手続きへ進む</button>
+      <h2 class="mt-5">各種情報の一覧</h2>
+      <h5 class="mt-5">役員情報</h5>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                <th scope="col">役職</th>
+                <th scope="col">氏名</th>
+                <th scope="col">所属</th>
+                <th scope="col">備考</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>部長</td>
+                    <td>{{club_leader.name}}</td>
+                    <td>{{club_leader.class_name}}</td>
+                    <td>{{club_leader.disc}}</td>
+                </tr>
+                <tr>
+                    <td>副部長</td>
+                    <td>{{club_subleader.name}}</td>
+                    <td>{{club_subleader.class_name}}</td>
+                    <td>{{club_subleader.disc}}</td>
+                </tr>
+                <tr>
+                    <td>会計</td>
+                    <td>{{casher.name}}</td>
+                    <td>{{casher.class_name}}</td>
+                    <td>{{casher.disc}}</td>
+                </tr>
+                <tr>
+                    <td>システム管理者</td>
+                    <td>{{admin.name}}</td>
+                    <td>{{admin.class_name}}</td>
+                    <td>{{admin.disc}}</td>
+                </tr>
+            </tbody>
+            </table>
+
+            <br>
+
+            <h5 class="mt-5">各学年の人数情報</h5>
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                    <th scope="col">学年</th>
+                    <th scope="col">人数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>5年生</td>
+                        <td>{{members.grade5}}</td>
+                    </tr>
+                    <tr>
+                        <td>4年生</td>
+                        <td>{{members.grade4}}</td>
+                    </tr>
+                    <tr>
+                        <td>3年生</td>
+                        <td>{{members.grade3}}</td>
+                    </tr>
+                    <tr>
+                        <td>2年生</td>
+                        <td>{{members.grade2}}</td>
+                    </tr>
+                    <tr>
+                        <td>1年生</td>
+                        <td>{{members.grade1}}</td>
+                    </tr>
+                    <tr>
+                        <td>合計</td>
+                        <td>{{members.all}}</td>
+                    </tr>
+                </tbody>
+                </table>
+                <br>
+
+        <h5 class="mt-5">このシステムについて</h5>
+        <p>PCC-CASおよび、PCC-RENTは、齋藤 直人によって開発/保守/管理/運用されています。</p>
+        <h5 class="mt-5">お問い合わせ</h5>
+        <p>メール: system.anctpcc@gmail.com</p>
+        <p>　　　  or</p>
+        <p>　　　  n-saitou@mail.nemnet-lab.net</p>
+        <p>Discord: networld4816</p>
+        <p>※お問い合わせの際は、クラスと氏名を必ず明記してください。</p>
+        <p>　お問い合わせは、上記役職者経由でもかまいません。</p>
 
     </main>
   </div>
@@ -299,6 +364,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js" integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="{{url_for('static',filename='user_settings.js')}}"></script>
+    <script src="{{url_for('static',filename='info.js')}}"></script>
     
 </html>

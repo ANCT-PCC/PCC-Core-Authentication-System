@@ -249,6 +249,37 @@ def update_user_info(conn,uname:str,column:str,new_data:str):
     conn.commit()
     c.close()
 
+#役員と部員の人数を取得
+def get_club_information(conn):
+    #役員などの情報を取得
+    c = conn.cursor()
+    c.execute(f'''SELECT displayname,grade,mesc FROM pcc_cas.{TABLE_NAME} WHERE post = "部長" ''')
+    leader = c.fetchall()
+    c.execute(f'''SELECT displayname,grade,mesc FROM pcc_cas.{TABLE_NAME} WHERE post = "副部長" ''')
+    subleaders = c.fetchall()
+    c.execute(f'''SELECT displayname,grade,mesc FROM pcc_cas.{TABLE_NAME} WHERE post = "会計" ''')
+    casher = c.fetchall()
+    c.execute(f'''SELECT displayname,grade,mesc FROM pcc_cas.{TABLE_NAME} WHERE post = "システム管理者" ''')
+    administrator = c.fetchall()
+
+    #各学年の人数を取得
+    c.execute(f'''SELECT COUNT(*) FROM pcc_cas.{TABLE_NAME} WHERE grade = "1" ''')
+    grade1 = c.fetchall()
+    c.execute(f'''SELECT COUNT(*) FROM pcc_cas.{TABLE_NAME} WHERE grade = "2" ''')
+    grade2 = c.fetchall()
+    c.execute(f'''SELECT COUNT(*) FROM pcc_cas.{TABLE_NAME} WHERE grade = "3" ''')
+    grade3 = c.fetchall()
+    c.execute(f'''SELECT COUNT(*) FROM pcc_cas.{TABLE_NAME} WHERE grade = "4" ''')
+    grade4 = c.fetchall()
+    c.execute(f'''SELECT COUNT(*) FROM pcc_cas.{TABLE_NAME} WHERE grade = "5" ''')
+    grade5 = c.fetchall()
+    c.close()
+
+    workers = [leader,subleaders,casher,administrator]
+    members = [grade1[0][0],grade2[0][0],grade3[0][0],grade4[0][0],grade5[0][0]]
+
+    return workers,members
+
 #有効なトークンの有効性検証結果とユーザ名の応答
 def cktoken(conn,uname:str,token:str):
     c=conn.cursor()
