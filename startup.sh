@@ -14,5 +14,6 @@ sed -i -e s#$PREV_ADDR#$SERVER_ADDR#g static/user_settings.js
 sed -i -e s#$PREV_ADDR#$SERVER_ADDR#g static/submit.js
 sed -i -e s#$PREV_ADDR#$SERVER_ADDR#g static/submit_inputs.js
 sed -i -e s#$PREV_ADDR#$SERVER_ADDR#g static/leave_pcc.js
+sed -i -e s#$PREV_ADDR#$SERVER_ADDR#g static/admin-pwreset.js
 
 python pcc-cas.py
