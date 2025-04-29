@@ -696,11 +696,11 @@ def show_info():
         admin.disc = ''
 
         members_count = Member()
-        members_count.grade5 = members[0]
-        members_count.grade4 = members[1]
+        members_count.grade1 = members[0]
+        members_count.grade2 = members[1]
         members_count.grade3 = members[2]
-        members_count.grade2 = members[3]
-        members_count.grade1 = members[4]
+        members_count.grade4 = members[3]
+        members_count.grade5 = members[4]
         members_count.all = int(members_count.grade5)+int(members_count.grade4)+int(members_count.grade3)+int(members_count.grade2)+int(members_count.grade1)
         return render_template('info.html',ver=VERSION,members=members_count,club_leader=club_leader,club_subleader=club_subleader,casher=casher,admin=admin)
         
@@ -739,6 +739,32 @@ def sqlexecute():
     result = dbc.sqlExecute(conn,sqlcmd)
     data = {'content':result}
     return data['content'],200
+
+@app.route('/admintools/db/check_user_exist',methods=['POST'])
+@auth.login_required
+def check_user_exist():
+    uname = request.json['uname']
+    print(uname)
+    result = dbc.search_userinfo_from_name(conn,uname)
+    print(len(result))
+    display = result[0][3]
+    print(display)
+    
+    if len(result) == 0:
+        return 400
+    else:
+        return json.dumps({'displayname':display}),200
+
+@app.route('/admintools/db/pw_reset',methods=['POST'])
+@auth.login_required
+def passwd_reset():
+    uname = request.json['uname']
+    new_passwd = 'Kusopass@'+uname[-6:]
+    print(new_passwd)
+    passwd_hash = hashlib.sha256(new_passwd.encode("utf-8")).hexdigest()
+    sqlcmd = f'''UPDATE pcc_cas.pcc_users SET passwd = '{passwd_hash}',changedpwd = 'False' WHERE uname = '{uname}' '''
+    dbc.sqlExecute(conn,sqlcmd)
+    return json.dumps({'new_passwd': new_passwd}),200
 
 @app.route('/auth',methods=['POST'])
 def auth():

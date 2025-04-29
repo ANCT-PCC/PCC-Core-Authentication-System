@@ -137,6 +137,8 @@ def create_new_user(conn,uname:str,grade:str,mesc:str,displayname:str,passwd:str
         post = '会計'
     elif post == '4':
         post = '基幹システム班'
+    elif post == '5':
+        post = 'システム管理者'
     else:
         post = 'その他の役職'
 
@@ -176,6 +178,8 @@ def create_new_user_from_form(conn,uname:str,grade:str,mesc:str,displayname:str,
         post = '会計'
     elif post == '4':
         post = '基幹システム班'
+    elif post == '5':
+        post = 'システム管理者'
     else:
         post = 'その他の役職'
 
